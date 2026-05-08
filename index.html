@@ -4,12 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Communitrail – Inscripcions Curses de Muntanya</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;background:#f4f5f0;color:#1a1a1a;min-height:100vh}
+body{font-family:'Poppins',sans-serif;background:#eeeeec;color:#1a1a1a;min-height:100vh}
 .btn-green{background:#16a34a;color:#fff;border:none;padding:12px 24px;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;transition:background 0.2s;display:inline-block}
 .btn-green:hover{background:#15803d}
 .btn-green:disabled{background:#86efac;cursor:not-allowed}
@@ -25,8 +26,8 @@ input:focus,select:focus{border-color:#16a34a;box-shadow:0 0 0 3px #dcfce7}
 .badge-moderate{background:#d1fae5;color:#065f46}
 /* NAV fluid */
 nav{background:#fff;border-bottom:1px solid #e5e7eb;padding:0 clamp(20px,4vw,80px);height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
-.logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:18px;color:#1a1a1a;cursor:pointer;text-decoration:none}
-.logo-icon{color:#16a34a}
+.logo{display:flex;align-items:center;gap:10px;cursor:pointer;text-decoration:none;flex-shrink:0}
+.logo-text{font-family:'Poppins',sans-serif;font-weight:800;font-size:20px;color:#1a4a2e;letter-spacing:-0.3px}
 .nav-links{display:flex;gap:24px;align-items:center}
 /* CARDS */
 .card{background:#fff;border-radius:12px;border:1px solid #e5e7eb;overflow:hidden}
@@ -62,12 +63,137 @@ footer{background:#111827;color:#9ca3af;padding:56px clamp(20px,4vw,80px) 32px}
 @media(max-width:860px){.filter-layout{grid-template-columns:1fr}}
 @media(max-width:600px){.races-grid{grid-template-columns:1fr}.footer-inner{grid-template-columns:1fr 1fr}}
 @media(max-width:420px){.footer-inner{grid-template-columns:1fr}}
+/* HAMBURGER MENU */
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px;border-radius:6px}
+.hamburger span{display:block;width:24px;height:2px;background:#1a4a2e;border-radius:2px;transition:all 0.28s ease}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mobile-menu{position:fixed;top:64px;left:0;right:0;bottom:0;background:#fff;z-index:99;padding:24px clamp(20px,4vw,40px);display:flex;flex-direction:column;gap:6px;transform:translateY(-110%);transition:transform 0.32s cubic-bezier(0.4,0,0.2,1);overflow-y:auto}
+.mobile-menu.open{transform:translateY(0)}
+.mobile-menu-overlay{position:fixed;inset:0;top:64px;background:rgba(0,0,0,0.4);z-index:98;opacity:0;pointer-events:none;transition:opacity 0.3s}
+.mobile-menu-overlay.open{opacity:1;pointer-events:all}
+.mob-link{display:block;padding:14px 0;font-size:16px;font-weight:600;color:#1a1a1a;border-bottom:1px solid #f3f4f6;background:none;border-left:none;border-right:none;border-top:none;cursor:pointer;text-align:left;font-family:'Poppins',sans-serif;transition:color 0.15s}
+.mob-link:hover{color:#16a34a}
+/* FILTER POPUP MOBILE */
+.filter-popup-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;opacity:0;pointer-events:none;transition:opacity 0.25s}
+.filter-popup-backdrop.open{opacity:1;pointer-events:all}
+.filter-popup{position:fixed;bottom:0;left:0;right:0;background:#fff;z-index:201;border-radius:20px 20px 0 0;padding:0 20px 32px;max-height:88vh;overflow-y:auto;transform:translateY(100%);transition:transform 0.32s cubic-bezier(0.4,0,0.2,1)}
+.filter-popup.open{transform:translateY(0)}
+.filter-popup-handle{width:40px;height:4px;background:#e5e7eb;border-radius:2px;margin:14px auto 20px}
+/* Hide desktop nav on mobile, show hamburger */
+@media(max-width:768px){
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  .hamburger-solo{display:none !important}
+  .mobile-nav-right{display:flex !important}
+  .filter-sidebar{display:none !important}
+  .filter-layout{grid-template-columns:1fr !important}
+  .mobile-filter-btn{display:flex !important}
+  .races-grid{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+  .noticia-destacada{grid-template-columns:1fr !important}
+  .payment-grid{grid-template-columns:1fr !important}
+  .contact-grid{grid-template-columns:1fr !important}
+  .profile-stats-4{grid-template-columns:repeat(2,1fr) !important}
+  /* Race page 3-col → 1-col on mobile */
+  .race-3col{grid-template-columns:1fr !important}
+  .race-3col > div:first-child{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .race-stats-bar{grid-template-columns:repeat(3,1fr) !important}
+  .race-gallery{grid-template-columns:1fr 1fr !important}
+}
+@media(min-width:769px){
+  .hamburger{display:none}
+  .mobile-nav-right{display:none !important}
+}
 </style>
 </head>
 <body>
 <div id="root"></div>
 <script type="text/babel">
 const {useState, useEffect} = React;
+
+/* ── UTILITAT SCROLL TOP ── */
+const scrollTop = () => window.scrollTo({top:0, behavior:'instant'});
+
+/* ── NOTÍCIES ── */
+const NOTICIES = [
+  {
+    id:1,
+    titol:"Kilian Jornet guanya l'Ultra-Trail du Mont-Blanc per cinquena vegada",
+    resum:"El corredor català va dominar de principi a fi la prova reina del trail running mundial, completant els 171 km amb 10.000m de desnivell en un temps de 19h 49min, establint un nou rècord del recorregut.",
+    text:"Kilian Jornet ha tornat a escriure una nova pàgina en la història del trail running mundial. A Chamonix, davant milers d'espectadors, el de Sabadell va creuar la línia de meta de l'UTMB amb un somriure i els braços enlaire, convertint-se en el corredor amb més victòries a la prova més prestigiosa del món. La cursa va tenir una sortida ràpida, amb Jornet imposant el seu ritme des dels primers quilòmetres. Al pas per Courmayeur, al km 80, ja portava més de 20 minuts d'avantatge sobre els seus més directes perseguidors. La segona meitat de la cursa va ser un monòleg del català, que va gestionar els seus recursos a la perfecció per acabar amb un registre de 19h 49min, millorant el seu propi rècord establert el 2022.",
+    img:"https://images.unsplash.com/photo-1551632811-561732d1e306?w=800&q=80",
+    data:"2 de maig de 2026",
+    categoria:"Resultats",
+    font:"carrerasdemontana.com"
+  },
+  {
+    id:2,
+    titol:"El Zegama-Aizkorri 2026 obre inscripcions amb un format renovat",
+    resum:"La mítica cursa basca celebra el seu 25è aniversari amb novetats importants: un nou recorregut que incorpora el cim de l'Aizkorri i un sistema d'inscripció per loteria obert a tot el món.",
+    text:"El Zegama-Aizkorri, considerada per molts la cursa de muntanya de curta distància més dura i espectacular d'Espanya, ha anunciat un format renovat per celebrar el seu 25è aniversari. La cursa basca, que recorre 42 km amb 4.200m de desnivell positiu, incorporarà un nou tram que porta els corredors fins al cim de l'Aizkorri (1.528m), punt més alt del País Basc. El sistema d'inscripció canviarà radicalment: per primera vegada, les places es repartiran per loteria internacional, obrint la porta a corredors de tot el món. El termini per apuntar-se al sorteig és el 15 de juny de 2026.",
+    img:"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80",
+    data:"28 d'abril de 2026",
+    categoria:"Inscripcions",
+    font:"carrerasdemontana.com"
+  },
+  {
+    id:3,
+    titol:"La Transvulcania 2026 batra rècord de participació amb 3.000 corredors",
+    resum:"La cursa de La Palma consolida el seu lloc entre les grans del calendari mundial amb una edició rècord que aplegarà corredors de 68 països diferents en un recorregut de 74 km.",
+    text:"La Transvulcania Ultramarathon ha anunciat que la seva edició 2026 serà la més gran de la seva història. La cursa de La Palma, que discorre per la cresta volcànica de l'illa amb vistes espectaculars a l'oceà Atlàntic, haurà esgotat totes les seves 3.000 places mesos abans de la celebració. La participació internacional és la nota destacada: corredors de 68 països han confirmat la seva presència, convertint la Transvulcania en un dels esdeveniments de trail running amb major diversitat geogràfica del món. L'organització ha reforçat els punts d'avituallament i el dispositiu de seguretat per garantir una edició segura i memorable.",
+    img:"https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&q=80",
+    data:"20 d'abril de 2026",
+    categoria:"Novetats",
+    font:"carrerasdemontana.com"
+  },
+  {
+    id:4,
+    titol:"Guia definitiva per preparar el teu primer Ultra Trail: nutrients, entrenament i material",
+    resum:"Els experts en nutrició esportiva i els millors entrenadors de trail running del país comparteixen els seus secrets per afrontar amb garanties el salt a les distàncies ultra per primera vegada.",
+    text:"Fer el salt a les distàncies ultra és un dels reptes més exigents que pot afrontar un corredor de muntanya. No es tracta només de córrer més quilòmetres: cal una planificació acurada de l'entrenament, una estratègia nutricional sòlida i l'equipament adequat. En aquest article, hem consultat alguns dels millors entrenadors i nutricionistes esportius del país per elaborar una guia completa. Pel que fa a l'entrenament, la clau és l'acumulació progressiva de volum durant almenys 6 mesos, combinant dies de tirada llarga amb sèries d'ascensos i treball de força. La nutrició durant la cursa és un aspecte crític: es recomana ingerir entre 60 i 90 grams d'hidrats de carboni per hora a partir de les 3 hores de cursa. Quant al material, la motxilla d'hidratació, els bastons i les ulleres de sol s'han convertit en elements gairebé imprescindibles.",
+    img:"https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80",
+    data:"15 d'abril de 2026",
+    categoria:"Preparació",
+    font:"carrerasdemontana.com"
+  },
+];
+
+/* ── ARXIU 20 CURSES ── */
+const ARXIU_RACES = [
+  {id:101,name:"Ultra Pirineu",location:"Bagà, Barcelona",date:"5 d'octubre de 2026",distancia:107,desnivell:7600,preu:130,spots:1500,taken:1243,dificultat:"tècnica",categoria:"Ultra",img:"https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&q=80"},
+  {id:102,name:"Buff Epic Trail",location:"Berga, Barcelona",date:"19 de juliol de 2026",distancia:105,desnivell:7000,preu:125,spots:800,taken:654,dificultat:"tècnica",categoria:"Ultra",img:"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80"},
+  {id:103,name:"Tor des Géants",location:"Courmayeur, Itàlia",date:"7 de setembre de 2026",distancia:330,desnivell:24000,preu:350,spots:600,taken:598,dificultat:"tècnica",categoria:"Ultra",img:"https://images.unsplash.com/photo-1519681393784-d120267933ba?w=600&q=80"},
+  {id:104,name:"Lavaredo Ultra Trail",location:"Cortina, Itàlia",date:"28 de juny de 2026",distancia:120,desnivell:5800,preu:145,spots:700,taken:612,dificultat:"tècnica",categoria:"Ultra",img:"https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=600&q=80"},
+  {id:105,name:"Trail Penyagolosa",location:"Castelló, Comunitat Valenciana",date:"27 d'abril de 2026",distancia:63,desnivell:3500,preu:75,spots:500,taken:421,dificultat:"mitja",categoria:"Trail",img:"https://images.unsplash.com/photo-1448375240586-882707db888b?w=600&q=80"},
+  {id:106,name:"Cavalls del Vent",location:"Solsona, Lleida",date:"6 de juny de 2026",distancia:105,desnivell:5600,preu:110,spots:600,taken:487,dificultat:"tècnica",categoria:"Ultra",img:"https://images.unsplash.com/photo-1440342359743-84fcb8c21f21?w=600&q=80"},
+  {id:107,name:"Marató Alpina Pirineus",location:"Puigcerdà, Girona",date:"13 de setembre de 2026",distancia:42,desnivell:2200,preu:70,spots:400,taken:312,dificultat:"mitja",categoria:"Marató",img:"https://images.unsplash.com/photo-1551632811-561732d1e306?w=600&q=80"},
+  {id:108,name:"El Cruce Columbia",location:"Gran Canària",date:"12 de desembre de 2026",distancia:75,desnivell:3800,preu:90,spots:1000,taken:876,dificultat:"mitja",categoria:"Ultra",img:"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80"},
+  {id:109,name:"Trail Sierra Nevada",location:"Granada",date:"22 de novembre de 2026",distancia:85,desnivell:5200,preu:95,spots:500,taken:398,dificultat:"tècnica",categoria:"Ultra",img:"https://images.unsplash.com/photo-1519681393784-d120267933ba?w=600&q=80"},
+  {id:110,name:"Correbarrancs",location:"Santa Eulàlia de Ronçana, Barcelona",date:"8 de febrer de 2026",distancia:30,desnivell:900,preu:35,spots:1200,taken:1156,dificultat:"fàcil",categoria:"Trail",img:"https://images.unsplash.com/photo-1448375240586-882707db888b?w=600&q=80"},
+  {id:111,name:"Ultra Trail Aneto",location:"Benasque, Osca",date:"4 de juliol de 2026",distancia:110,desnivell:8500,preu:140,spots:300,taken:267,dificultat:"tècnica",categoria:"Ultra",img:"https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&q=80"},
+  {id:112,name:"Marató de Muntanya Andorra",location:"Andorra la Vella",date:"3 d'octubre de 2026",distancia:42,desnivell:2800,preu:80,spots:500,taken:423,dificultat:"mitja",categoria:"Marató",img:"https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=600&q=80"},
+  {id:113,name:"Kilómetro Vertical Aramon",location:"Formigal, Osca",date:"10 de maig de 2026",distancia:6,desnivell:1000,preu:40,spots:200,taken:178,dificultat:"tècnica",categoria:"Trail",img:"https://images.unsplash.com/photo-1440342359743-84fcb8c21f21?w=600&q=80"},
+  {id:114,name:"Trail dels Castells",location:"Castellbell, Barcelona",date:"18 d'octubre de 2026",distancia:28,desnivell:1200,preu:30,spots:600,taken:534,dificultat:"fàcil",categoria:"Trail",img:"https://images.unsplash.com/photo-1448375240586-882707db888b?w=600&q=80"},
+  {id:115,name:"Ultra Sierra Crest",location:"Ronda, Màlaga",date:"14 de novembre de 2026",distancia:80,desnivell:4800,preu:100,spots:400,taken:312,dificultat:"tècnica",categoria:"Ultra",img:"https://images.unsplash.com/photo-1551632811-561732d1e306?w=600&q=80"},
+  {id:116,name:"Marató per Muntanya Garrotxa",location:"Olot, Girona",date:"26 d'abril de 2026",distancia:43,desnivell:2100,preu:65,spots:700,taken:612,dificultat:"mitja",categoria:"Marató",img:"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80"},
+  {id:117,name:"Trail Costa Brava",location:"Palamós, Girona",date:"20 de setembre de 2026",distancia:55,desnivell:1800,preu:72,spots:800,taken:654,dificultat:"mitja",categoria:"Trail",img:"https://images.unsplash.com/photo-1440342359743-84fcb8c21f21?w=600&q=80"},
+  {id:118,name:"Fuente Blanca",location:"Baqueira Beret, Lleida",date:"31 de gener de 2026",distancia:18,desnivell:1400,preu:45,spots:300,taken:289,dificultat:"tècnica",categoria:"Trail",img:"https://images.unsplash.com/photo-1519681393784-d120267933ba?w=600&q=80"},
+  {id:119,name:"Marató Muntanya Tenerife",location:"Santa Cruz de Tenerife",date:"15 de novembre de 2026",distancia:42,desnivell:2600,preu:75,spots:600,taken:478,dificultat:"mitja",categoria:"Marató",img:"https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=600&q=80"},
+  {id:120,name:"Trail de l'Albera",location:"Figueres, Girona",date:"29 de març de 2026",distancia:35,desnivell:1600,preu:40,spots:500,taken:443,dificultat:"fàcil",categoria:"Trail",img:"https://images.unsplash.com/photo-1448375240586-882707db888b?w=600&q=80"},
+];
+const ROLS = {
+  corredor:     { label:'Corredor',     color:'#1d4ed8', bg:'#eff6ff', icon:'🏃' },
+  organitzador: { label:'Organitzador', color:'#7c3aed', bg:'#f5f3ff', icon:'📋' },
+  admin:        { label:'Admin',        color:'#b45309', bg:'#fffbeb', icon:'⚙️'  },
+};
+
+const USERS_SIMULATS = {
+  corredor:     { name:'Eloi Ribot',    email:'eloi@gmail.com',    password:'123456', phone:'+34 600 111 222', since:'Abril 2026', rol:'corredor',     registrations:[] },
+  organitzador: { name:'Marta Puig',    email:'marta@org.com',     password:'123456', phone:'+34 611 222 333', since:'Gener 2026',  rol:'organitzador',  registrations:[] },
+  admin:        { name:'Admin Sistema', email:'admin@communitrail.com', password:'123456', phone:'+34 900 000 000', since:'Gener 2025', rol:'admin', registrations:[] },
+};
+
 
 /* ── DADES ── */
 const RACES = [
@@ -134,49 +260,30 @@ const RACES = [
 ];
 
 /* ── COMPONENTS REUTILITZABLES ── */
-const Nav = ({page, setPage, user, setUser}) => {
-  const logout = () => {
-    localStorage.removeItem('ct_user');
-    setUser(null);
-    setPage('home');
-  };
-  return (
-    <nav>
-      <div className="logo" onClick={() => setPage('home')}>
-        <span className="logo-icon">⛰</span> Communitrail
-      </div>
-      <div className="nav-links">
-        <button className="btn-ghost" onClick={() => setPage('home')}>Curses</button>
-        <button className="btn-ghost">Calendari</button>
-        <button className="btn-ghost">Informació</button>
-        {user ? (
-          <>
-            <button className="btn-ghost" style={{color:'#16a34a',fontWeight:700}} onClick={() => setPage('profile')}>
-              👤 {user.name.split(' ')[0]}
-            </button>
-            <button className="btn-outline" style={{padding:'7px 14px',fontSize:13}} onClick={logout}>
-              Tancar sessió
-            </button>
-          </>
-        ) : (
-          <>
-            <button className="btn-ghost" onClick={() => setPage('signin')}>Accedir</button>
-            <button className="btn-green" style={{padding:'9px 18px',fontSize:13}} onClick={() => setPage('signup')}>
-              Registrar-se
-            </button>
-          </>
-        )}
-      </div>
-    </nav>
-  );
-};
+const LogoSVG = ({size=42}) => (
+  <svg width={size} height={size} viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="21" cy="21" r="20" fill="#1a4a2e" />
+    <circle cx="21" cy="21" r="18" fill="#fff" fillOpacity="0.08" />
+    <ellipse cx="21" cy="31" rx="16" ry="6" fill="#7a3b1e" />
+    <path d="M17 32 Q19 29 21 30 Q23 31 25 28" stroke="#c8834a" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+    <polygon points="21,10 30,28 12,28" fill="#fff" />
+    <polygon points="14,15 22,28 6,28" fill="#2d6a3f" />
+    <polygon points="21,10 24.5,16 17.5,16" fill="#e8f4f0" />
+    <g fill="#1a4a2e" transform="translate(23,13)">
+      <circle cx="2" cy="1" r="1.2" />
+      <path d="M2,2.2 L1.2,5.5 M1.2,5.5 L0,8 M1.2,5.5 L2.8,8" stroke="#1a4a2e" strokeWidth="1.1" fill="none" strokeLinecap="round"/>
+      <path d="M2,3.2 L0.2,4.8 M2,3.2 L3.6,4.2" stroke="#1a4a2e" strokeWidth="1" fill="none" strokeLinecap="round"/>
+    </g>
+  </svg>
+);
 
 const Footer = ({setPage}) => (
   <footer>
     <div className="footer-inner">
       <div>
-        <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:14,color:'#fff',fontWeight:800,fontSize:16}}>
-          ⛰ Communitrail
+        <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
+          <LogoSVG size={36}/>
+          <span style={{fontFamily:"'Poppins',sans-serif",fontWeight:800,fontSize:18,color:'#fff',letterSpacing:'-0.3px'}}>Communitrail</span>
         </div>
         <p style={{fontSize:13,lineHeight:1.7,maxWidth:220}}>
           La plataforma líder d'inscripcions per a curses de muntanya a Espanya.
@@ -245,7 +352,7 @@ const RaceCard = ({race, onClick}) => {
 /* ── PÀGINES ── */
 const MAX_PREU = 150;
 
-const HomePage = ({setPage, setSelectedRace}) => {
+const HomePage = ({setPage, setSelectedRace, races = RACES.map(r=>({...r,estat:'publicada'})), goView}) => {
   const [cerca, setCerca] = useState('');
   const [categoria, setCategoria] = useState('Totes');
   const [preuMax, setPreuMax] = useState(MAX_PREU);
@@ -253,7 +360,8 @@ const HomePage = ({setPage, setSelectedRace}) => {
 
   const toggleDif = d => setDificultats(prev => ({...prev, [d]: !prev[d]}));
 
-  const filteredRaces = RACES.filter(r => {
+  const filteredRaces = races.filter(r => {
+    if (r.estat !== 'publicada') return false;
     const matchNom = r.name.toLowerCase().includes(cerca.toLowerCase()) ||
                      r.ubicacio.toLowerCase().includes(cerca.toLowerCase());
     const matchCat = categoria === 'Totes' || r.categoria === categoria;
@@ -270,8 +378,91 @@ const HomePage = ({setPage, setSelectedRace}) => {
   const anyFilterActive = cerca !== '' || categoria !== 'Totes' || preuMax < MAX_PREU ||
     !dificultats.fàcil || !dificultats.mitja || !dificultats.tècnica;
 
+  const [filterPopupOpen, setFilterPopupOpen] = useState(false);
+
   const difColors = {fàcil:'#065f46',mitja:'#92400e',tècnica:'#991b1b'};
   const difBg = {fàcil:'#d1fae5',mitja:'#fef3c7',tècnica:'#fee2e2'};
+
+  // Contingut dels filtres reutilitzable (desktop sidebar + mobile popup)
+  const FilterContent = ({onClose}) => (
+    <>
+      {/* Cerca per nom */}
+      <div style={{marginBottom:22}}>
+        <label style={{fontSize:12,fontWeight:700,color:'#6b7280',textTransform:'uppercase',letterSpacing:'0.6px',display:'block',marginBottom:8}}>Cerca</label>
+        <div style={{position:'relative'}}>
+          <span style={{position:'absolute',left:11,top:'50%',transform:'translateY(-50%)',color:'#9ca3af',fontSize:14}}>🔎</span>
+          <input type="text" placeholder="Nom o província..." value={cerca}
+            onChange={e => setCerca(e.target.value)} style={{paddingLeft:32,fontSize:13}}/>
+        </div>
+      </div>
+      {/* Categoria */}
+      <div style={{marginBottom:22}}>
+        <label style={{fontSize:12,fontWeight:700,color:'#6b7280',textTransform:'uppercase',letterSpacing:'0.6px',display:'block',marginBottom:8}}>Categoria</label>
+        <div style={{display:'flex',flexDirection:'column',gap:6}}>
+          {['Totes','Trail','Marató','Ultra'].map(cat => (
+            <button key={cat} onClick={() => setCategoria(cat)} style={{
+              textAlign:'left',padding:'10px 14px',borderRadius:8,border:'1.5px solid',fontSize:13,cursor:'pointer',transition:'all 0.15s',
+              borderColor: categoria === cat ? '#16a34a' : '#e5e7eb',
+              background: categoria === cat ? '#f0fdf4' : '#fff',
+              color: categoria === cat ? '#15803d' : '#374151',
+              fontWeight: categoria === cat ? 700 : 500,
+            }}>
+              {cat === 'Totes' ? '🏃 Totes les categories' : cat === 'Trail' ? '🌲 Trail' : cat === 'Marató' ? '⛰️ Marató' : '🏔️ Ultra'}
+            </button>
+          ))}
+        </div>
+      </div>
+      {/* Preu màxim */}
+      <div style={{marginBottom:22}}>
+        <label style={{fontSize:12,fontWeight:700,color:'#6b7280',textTransform:'uppercase',letterSpacing:'0.6px',display:'block',marginBottom:8}}>
+          Preu màxim: <span style={{color:'#16a34a',fontWeight:800}}>{preuMax}€</span>
+        </label>
+        <input type="range" min={30} max={MAX_PREU} step={5} value={preuMax}
+          onChange={e => setPreuMax(Number(e.target.value))}
+          style={{width:'100%',accentColor:'#16a34a',cursor:'pointer',padding:0,border:'none',background:'transparent'}}/>
+        <div style={{display:'flex',justifyContent:'space-between',fontSize:11,color:'#9ca3af',marginTop:4}}>
+          <span>30€</span><span>{MAX_PREU}€</span>
+        </div>
+      </div>
+      {/* Dificultat */}
+      <div style={{marginBottom:24}}>
+        <label style={{fontSize:12,fontWeight:700,color:'#6b7280',textTransform:'uppercase',letterSpacing:'0.6px',display:'block',marginBottom:10}}>Dificultat</label>
+        {['fàcil','mitja','tècnica'].map(d => (
+          <label key={d} style={{display:'flex',alignItems:'center',gap:10,marginBottom:10,cursor:'pointer',userSelect:'none'}}>
+            <div onClick={() => toggleDif(d)} style={{
+              width:20,height:20,borderRadius:5,border:`2px solid ${dificultats[d] ? '#16a34a' : '#d1d5db'}`,
+              background: dificultats[d] ? '#16a34a' : '#fff',
+              display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,transition:'all 0.15s',cursor:'pointer'
+            }}>
+              {dificultats[d] && <span style={{color:'#fff',fontSize:12,fontWeight:800,lineHeight:1}}>✓</span>}
+            </div>
+            <span style={{
+              fontSize:13,fontWeight:600,padding:'3px 12px',borderRadius:20,
+              background: dificultats[d] ? difBg[d] : '#f3f4f6',
+              color: dificultats[d] ? difColors[d] : '#9ca3af', transition:'all 0.15s'
+            }}>
+              {d.charAt(0).toUpperCase()+d.slice(1)}
+            </span>
+          </label>
+        ))}
+      </div>
+      {/* Botons d'acció popup mòbil */}
+      {onClose && (
+        <div style={{display:'flex',gap:10}}>
+          <button onClick={()=>{resetFiltres();}} className="btn-outline" style={{flex:1,padding:'12px'}}>Netejar</button>
+          <button onClick={onClose} className="btn-green" style={{flex:2,padding:'12px'}}>
+            Veure {filteredRaces.length} cursa{filteredRaces.length!==1?'es':''}
+          </button>
+        </div>
+      )}
+      {/* Resum desktop */}
+      {!onClose && (
+        <div style={{marginTop:8,paddingTop:16,borderTop:'1px solid #e5e7eb',textAlign:'center',fontSize:13,color:'#6b7280'}}>
+          <span style={{fontWeight:700,color:'#16a34a',fontSize:15}}>{filteredRaces.length}</span> cursa{filteredRaces.length!==1?'es':''} trobada{filteredRaces.length!==1?'es':''}
+        </div>
+      )}
+    </>
+  );
 
   return (
   <div>
@@ -298,8 +489,8 @@ const HomePage = ({setPage, setSelectedRace}) => {
             </p>
             <div style={{display:'flex',gap:14,flexWrap:'wrap',marginBottom:52}}>
               <button className="btn-green" style={{fontSize:15,padding:'14px 30px',boxShadow:'0 4px 22px rgba(22,163,74,0.45)'}}
-                onClick={() => document.getElementById('races').scrollIntoView({behavior:'smooth'})}>
-                Veure curses disponibles →
+                onClick={() => goView('arxiu')}>
+                Veure totes les curses →
               </button>
               <button style={{background:'none',border:'2px solid rgba(255,255,255,0.35)',color:'#fff',padding:'12px 24px',borderRadius:8,fontSize:15,cursor:'pointer',fontWeight:600,transition:'border-color 0.2s,background 0.2s'}}
                 onMouseOver={e=>{e.currentTarget.style.borderColor='rgba(255,255,255,0.75)';e.currentTarget.style.background='rgba(255,255,255,0.08)'}}
@@ -324,106 +515,42 @@ const HomePage = ({setPage, setSelectedRace}) => {
     {/* Races + Filters */}
     <div id="races" style={{padding:'52px 0 64px'}}>
       <div className="section-max">
+
+        {/* Capçalera secció */}
         <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',marginBottom:32,flexWrap:'wrap',gap:12}}>
           <div>
             <h2 style={{fontSize:26,fontWeight:800,marginBottom:6}}>Properes curses</h2>
             <p style={{color:'#6b7280',fontSize:15}}>Troba el teu proper desafiament a la muntanya</p>
           </div>
-          {anyFilterActive && (
-            <button onClick={resetFiltres} style={{background:'none',border:'1.5px solid #d1d5db',color:'#6b7280',padding:'7px 16px',borderRadius:8,fontSize:13,cursor:'pointer',fontWeight:600,display:'flex',alignItems:'center',gap:6,transition:'all 0.2s'}}
-              onMouseOver={e=>{e.currentTarget.style.borderColor='#dc2626';e.currentTarget.style.color='#dc2626'}}
-              onMouseOut={e=>{e.currentTarget.style.borderColor='#d1d5db';e.currentTarget.style.color='#6b7280'}}>
-              ✕ Netejar filtres
+          <div style={{display:'flex',gap:10,alignItems:'center'}}>
+            {anyFilterActive && (
+              <button onClick={resetFiltres} style={{background:'none',border:'1.5px solid #d1d5db',color:'#6b7280',padding:'7px 16px',borderRadius:8,fontSize:13,cursor:'pointer',fontWeight:600,display:'flex',alignItems:'center',gap:6}}
+                onMouseOver={e=>{e.currentTarget.style.borderColor='#dc2626';e.currentTarget.style.color='#dc2626'}}
+                onMouseOut={e=>{e.currentTarget.style.borderColor='#d1d5db';e.currentTarget.style.color='#6b7280'}}>
+                ✕ Netejar filtres
+              </button>
+            )}
+            {/* Botó filtres MÒBIL */}
+            <button onClick={() => setFilterPopupOpen(true)} style={{
+              display:'none', alignItems:'center',gap:8,
+              background:'#1a4a2e',color:'#fff',border:'none',
+              padding:'10px 18px',borderRadius:10,fontSize:14,fontWeight:600,cursor:'pointer'
+            }}
+            className="mobile-filter-btn">
+              🔍 Filtres {anyFilterActive && <span style={{background:'#4ade80',color:'#1a4a2e',fontSize:11,fontWeight:800,padding:'1px 7px',borderRadius:20}}>{filteredRaces.length}</span>}
             </button>
-          )}
+          </div>
         </div>
 
         <div className="filter-layout">
-
-          {/* ── PANELL DE FILTRES ── */}
-          <div style={{position:'sticky',top:76}}>
+          {/* ── SIDEBAR FILTRES (desktop) ── */}
+          <div className="filter-sidebar" style={{position:'sticky',top:76}}>
             <div className="card" style={{padding:24}}>
               <h3 style={{fontSize:14,fontWeight:700,marginBottom:18,color:'#374151',display:'flex',alignItems:'center',gap:8}}>
                 🔍 Filtres
                 {anyFilterActive && <span style={{background:'#16a34a',color:'#fff',fontSize:10,fontWeight:700,padding:'2px 7px',borderRadius:20}}>actius</span>}
               </h3>
-
-              {/* Cerca per nom */}
-              <div style={{marginBottom:22}}>
-                <label style={{fontSize:12,fontWeight:700,color:'#6b7280',textTransform:'uppercase',letterSpacing:'0.6px',display:'block',marginBottom:8}}>Cerca</label>
-                <div style={{position:'relative'}}>
-                  <span style={{position:'absolute',left:11,top:'50%',transform:'translateY(-50%)',color:'#9ca3af',fontSize:14}}>🔎</span>
-                  <input
-                    type="text"
-                    placeholder="Nom o província..."
-                    value={cerca}
-                    onChange={e => setCerca(e.target.value)}
-                    style={{paddingLeft:32,fontSize:13}}
-                  />
-                </div>
-              </div>
-
-              {/* Categoria */}
-              <div style={{marginBottom:22}}>
-                <label style={{fontSize:12,fontWeight:700,color:'#6b7280',textTransform:'uppercase',letterSpacing:'0.6px',display:'block',marginBottom:8}}>Categoria</label>
-                <div style={{display:'flex',flexDirection:'column',gap:6}}>
-                  {['Totes','Trail','Marató','Ultra'].map(cat => (
-                    <button key={cat} onClick={() => setCategoria(cat)} style={{
-                      textAlign:'left',padding:'8px 12px',borderRadius:8,border:'1.5px solid',fontSize:13,fontWeight:500,cursor:'pointer',transition:'all 0.15s',
-                      borderColor: categoria === cat ? '#16a34a' : '#e5e7eb',
-                      background: categoria === cat ? '#f0fdf4' : '#fff',
-                      color: categoria === cat ? '#15803d' : '#374151',
-                      fontWeight: categoria === cat ? 700 : 400,
-                    }}>
-                      {cat === 'Totes' ? '🏃 Totes les categories' : cat === 'Trail' ? '🌲 Trail' : cat === 'Marató' ? '⛰️ Marató' : '🏔️ Ultra'}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Preu màxim */}
-              <div style={{marginBottom:22}}>
-                <label style={{fontSize:12,fontWeight:700,color:'#6b7280',textTransform:'uppercase',letterSpacing:'0.6px',display:'block',marginBottom:8}}>
-                  Preu màxim: <span style={{color:'#16a34a',fontWeight:800}}>{preuMax}€</span>
-                </label>
-                <input
-                  type="range" min={30} max={MAX_PREU} step={5} value={preuMax}
-                  onChange={e => setPreuMax(Number(e.target.value))}
-                  style={{width:'100%',accentColor:'#16a34a',cursor:'pointer',padding:0,border:'none',background:'transparent'}}
-                />
-                <div style={{display:'flex',justifyContent:'space-between',fontSize:11,color:'#9ca3af',marginTop:4}}>
-                  <span>30€</span><span>{MAX_PREU}€</span>
-                </div>
-              </div>
-
-              {/* Dificultat */}
-              <div>
-                <label style={{fontSize:12,fontWeight:700,color:'#6b7280',textTransform:'uppercase',letterSpacing:'0.6px',display:'block',marginBottom:10}}>Dificultat</label>
-                {['fàcil','mitja','tècnica'].map(d => (
-                  <label key={d} style={{display:'flex',alignItems:'center',gap:10,marginBottom:10,cursor:'pointer',userSelect:'none'}}>
-                    <div onClick={() => toggleDif(d)} style={{
-                      width:18,height:18,borderRadius:4,border:`2px solid ${dificultats[d] ? '#16a34a' : '#d1d5db'}`,
-                      background: dificultats[d] ? '#16a34a' : '#fff',
-                      display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,transition:'all 0.15s',cursor:'pointer'
-                    }}>
-                      {dificultats[d] && <span style={{color:'#fff',fontSize:11,fontWeight:800,lineHeight:1}}>✓</span>}
-                    </div>
-                    <span style={{
-                      fontSize:13,fontWeight:600,padding:'2px 10px',borderRadius:20,
-                      background: dificultats[d] ? difBg[d] : '#f3f4f6',
-                      color: dificultats[d] ? difColors[d] : '#9ca3af',
-                      transition:'all 0.15s'
-                    }}>
-                      {d.charAt(0).toUpperCase()+d.slice(1)}
-                    </span>
-                  </label>
-                ))}
-              </div>
-
-              {/* Resum de resultats */}
-              <div style={{marginTop:20,paddingTop:16,borderTop:'1px solid #e5e7eb',textAlign:'center',fontSize:13,color:'#6b7280'}}>
-                <span style={{fontWeight:700,color:'#16a34a',fontSize:15}}>{filteredRaces.length}</span> cursa{filteredRaces.length !== 1 ? 'es' : ''} trobada{filteredRaces.length !== 1 ? 'es' : ''}
-              </div>
+              <FilterContent onClose={null}/>
             </div>
           </div>
 
@@ -432,12 +559,8 @@ const HomePage = ({setPage, setSelectedRace}) => {
             {filteredRaces.length === 0 ? (
               <div style={{textAlign:'center',padding:'72px 24px',background:'#fff',borderRadius:16,border:'1.5px dashed #d1d5db'}}>
                 <div style={{fontSize:56,marginBottom:18}}>🏔️</div>
-                <h3 style={{fontSize:18,fontWeight:700,marginBottom:10,color:'#374151'}}>
-                  No s'han trobat curses amb aquests criteris
-                </h3>
-                <p style={{color:'#6b7280',marginBottom:24,fontSize:14,lineHeight:1.6}}>
-                  Prova a canviar els filtres o ampliar el rang de preu per veure més opcions.
-                </p>
+                <h3 style={{fontSize:18,fontWeight:700,marginBottom:10,color:'#374151'}}>No s'han trobat curses amb aquests criteris</h3>
+                <p style={{color:'#6b7280',marginBottom:24,fontSize:14,lineHeight:1.6}}>Prova a canviar els filtres o ampliar el rang de preu.</p>
                 <button className="btn-green" onClick={resetFiltres}>Veure totes les curses</button>
               </div>
             ) : (
@@ -448,6 +571,56 @@ const HomePage = ({setPage, setSelectedRace}) => {
               </div>
             )}
           </div>
+        </div>
+      </div>
+    </div>
+
+    {/* ── POPUP FILTRES MÒBIL (bottom sheet) ── */}
+    <div className={`filter-popup-backdrop ${filterPopupOpen ? 'open' : ''}`} onClick={() => setFilterPopupOpen(false)}/>
+    <div className={`filter-popup ${filterPopupOpen ? 'open' : ''}`}>
+      <div className="filter-popup-handle"/>
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:20}}>
+        <h3 style={{fontSize:17,fontWeight:700,color:'#1a1a1a'}}>
+          Filtres {anyFilterActive && <span style={{background:'#16a34a',color:'#fff',fontSize:11,fontWeight:700,padding:'2px 8px',borderRadius:20,marginLeft:6}}>actius</span>}
+        </h3>
+        <button onClick={() => setFilterPopupOpen(false)} style={{background:'#f3f4f6',border:'none',width:32,height:32,borderRadius:'50%',cursor:'pointer',fontSize:16,display:'flex',alignItems:'center',justifyContent:'center'}}>✕</button>
+      </div>
+      <FilterContent onClose={() => setFilterPopupOpen(false)}/>
+    </div>
+    {/* ── FEED NOTÍCIES ── */}
+    <div style={{padding:'56px 0 64px',background:'#fff',borderTop:'1px solid #e5e7eb'}}>
+      <div className="section-max">
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',marginBottom:32}}>
+          <div>
+            <h2 style={{fontSize:26,fontWeight:800,marginBottom:6}}>Últimes notícies</h2>
+            <p style={{color:'#6b7280',fontSize:15}}>Actualitat del món del trail running</p>
+          </div>
+          <button className="btn-outline" style={{fontSize:13,padding:'9px 20px'}} onClick={() => goView('noticies')}>
+            Veure totes →
+          </button>
+        </div>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(280px,1fr))',gap:22}}>
+          {NOTICIES.map(n => (
+            <div key={n.id} className="card" style={{cursor:'pointer',transition:'transform 0.18s,box-shadow 0.18s'}}
+              onMouseOver={e=>e.currentTarget.style.transform='translateY(-3px)'}
+              onMouseOut={e=>e.currentTarget.style.transform='none'}
+              onClick={() => goView('noticies')}>
+              <div style={{height:180,overflow:'hidden',position:'relative'}}>
+                <img src={n.img} alt={n.titol} style={{width:'100%',height:'100%',objectFit:'cover',transition:'transform 0.4s'}}
+                  onMouseOver={e=>e.style.transform='scale(1.06)'}
+                  onMouseOut={e=>e.style.transform='scale(1)'}/>
+                <div style={{position:'absolute',inset:0,background:'linear-gradient(to top,rgba(0,0,0,0.4),transparent 60%)'}}/>
+                <span style={{position:'absolute',top:12,left:12,background:'#16a34a',color:'#fff',fontSize:10,fontWeight:700,padding:'3px 10px',borderRadius:20,textTransform:'uppercase',letterSpacing:'0.5px'}}>
+                  {n.categoria}
+                </span>
+              </div>
+              <div style={{padding:'18px'}}>
+                <h3 style={{fontSize:14,fontWeight:700,marginBottom:8,lineHeight:1.4,color:'#1a1a1a'}}>{n.titol}</h3>
+                <p style={{fontSize:12,color:'#6b7280',lineHeight:1.6,marginBottom:10,display:'-webkit-box',WebkitLineClamp:2,WebkitBoxOrient:'vertical',overflow:'hidden'}}>{n.resum}</p>
+                <div style={{fontSize:11,color:'#9ca3af',fontWeight:500}}>{n.data}</div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
@@ -466,38 +639,125 @@ const HomePage = ({setPage, setSelectedRace}) => {
   );
 };
 
-const RacePage = ({race, setPage, user, setCurrentRegistration}) => {
+const SPONSORS = [
+  {name:'Salomon',   logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/sixty/Salomon_logo.svg/200px-Salomon_logo.svg.png', url:'#'},
+  {name:'Hoka',      logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Hoka_One_One_logo.svg/200px-Hoka_One_One_logo.svg.png', url:'#'},
+  {name:'GU Energy', logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/GU_Energy_Labs_logo.svg/200px-GU_Energy_Labs_logo.svg.png', url:'#'},
+  {name:'Buff',      logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Buff_logo.svg/200px-Buff_logo.svg.png', url:'#'},
+  {name:'Osprey',    logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Osprey_Packs_logo.svg/200px-Osprey_Packs_logo.svg.png', url:'#'},
+  {name:'Maurten',   logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Maurten_logo.svg/200px-Maurten_logo.svg.png', url:'#'},
+];
+
+const COMMENTS = [
+  {id:1, user:'Marc T.', avatar:'MT', rating:5, date:'Abril 2026', text:'Una experiència increïble! L\'organització perfecta, els avituallaments superabundants i els paisatges... simplement inoblidables. Tornaré l\'any que ve segur.'},
+  {id:2, user:'Laia R.', avatar:'LR', rating:5, date:'Abril 2026', text:'La meva primera ultra i no podria haver triat millor. El recorregut és dur però molt ben senyalitzat. L\'equip de voluntaris és fantàstic.'},
+  {id:3, user:'Jordi M.', avatar:'JM', rating:4, date:'Abril 2025', text:'Cursa molt ben organitzada. Potser l\'últim avituallament podria tenir una mica més de fruita, però en general una experiència de 10. Les vistes del km 60 no s\'obliden mai.'},
+  {id:4, user:'Sara P.', avatar:'SP', rating:5, date:'Setembre 2025', text:'He fet moltes curses de muntanya però aquesta té una màgia especial. La comunitat de corredors és molt acollidora i l\'ambient a la sortida és electritzant.'},
+];
+
+/* SVG perfil d'elevació simulat */
+const ElevationProfile = ({distancia, desnivell}) => {
+  const w = 500, h = 100;
+  // Generate a realistic-ish elevation curve based on race params
+  const pts = [];
+  const segments = 20;
+  let elevation = 200;
+  const maxEl = h - 10;
+  const seed = distancia * 7 + desnivell;
+  for (let i = 0; i <= segments; i++) {
+    const t = i / segments;
+    // Pseudo-random but deterministic wave
+    const noise = Math.sin(t * 5.3 + seed * 0.01) * 0.3 +
+                  Math.sin(t * 12.1 + seed * 0.02) * 0.15 +
+                  Math.sin(t * 2.7 + seed * 0.005) * 0.4;
+    // Main elevation shape: up in middle, down at end
+    const main = Math.sin(t * Math.PI) * 0.7 + noise * 0.3;
+    elevation = 10 + (maxEl - 10) * Math.max(0, Math.min(1, 0.15 + main * 0.85));
+    pts.push([Math.round((i / segments) * w), Math.round(h - elevation)]);
+  }
+  const pathD = pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p[0]},${p[1]}`).join(' ');
+  const fillD = `${pathD} L${w},${h} L0,${h} Z`;
+  // Key points for labels
+  const maxPt = pts.reduce((a,b) => a[1] < b[1] ? a : b);
+  return (
+    <div style={{position:'relative'}}>
+      <svg viewBox={`0 0 ${w} ${h}`} style={{width:'100%',height:100,display:'block'}}>
+        <defs>
+          <linearGradient id="elev-grad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#16a34a" stopOpacity="0.35"/>
+            <stop offset="100%" stopColor="#16a34a" stopOpacity="0.05"/>
+          </linearGradient>
+        </defs>
+        <path d={fillD} fill="url(#elev-grad)"/>
+        <path d={pathD} fill="none" stroke="#16a34a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+        {/* Max point dot */}
+        <circle cx={maxPt[0]} cy={maxPt[1]} r="4" fill="#16a34a"/>
+        <text x={maxPt[0]} y={maxPt[1]-8} fontSize="9" fill="#16a34a" fontWeight="700" textAnchor="middle">+{desnivell.toLocaleString()}m</text>
+        {/* X axis labels */}
+        {[0, 0.25, 0.5, 0.75, 1].map(t => (
+          <text key={t} x={t*w} y={h-1} fontSize="8" fill="#9ca3af" textAnchor="middle">{Math.round(t*distancia)}km</text>
+        ))}
+      </svg>
+    </div>
+  );
+};
+
+const StarRating = ({rating}) => (
+  <span>
+    {[1,2,3,4,5].map(s => (
+      <span key={s} style={{color: s<=rating ? '#f59e0b' : '#e5e7eb', fontSize:14}}>★</span>
+    ))}
+  </span>
+);
+
+const RacePage = ({race, setPage, user, setCurrentRegistration, goView}) => {
+  const [newComment, setNewComment] = useState('');
+  const [comments, setComments] = useState(COMMENTS);
+  const [submitted, setSubmitted] = useState(false);
   if (!race) return null;
   const pct = Math.round((race.taken / race.spots) * 100);
   const diffMap = {tècnica:'badge-extreme', mitja:'badge-difficult', fàcil:'badge-moderate'};
-
+  const avgRating = (comments.reduce((s,c)=>s+c.rating,0)/comments.length).toFixed(1);
+  // Extra gallery images (rotate through unsplash mountain photos)
+  const galleryImgs = [
+    'https://images.unsplash.com/photo-1551632811-561732d1e306?w=400&q=75',
+    'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=75',
+    'https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=400&q=75',
+    'https://images.unsplash.com/photo-1440342359743-84fcb8c21f21?w=400&q=75',
+  ];
   const handleRegister = () => {
     if (!user) { setPage('signin'); return; }
     setCurrentRegistration(race);
     setPage('payment');
   };
+  const submitComment = () => {
+    if (!newComment.trim() || !user) return;
+    const c = {id:Date.now(), user:user.name, avatar:user.name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase(), rating:5, date:'Ara mateix', text:newComment.trim()};
+    setComments(prev=>[c,...prev]);
+    setNewComment(''); setSubmitted(true);
+    setTimeout(()=>setSubmitted(false), 3000);
+  };
+  const avituallaments = Math.max(2, Math.round(race.distancia / 15));
 
   return (
     <div>
       {/* Back */}
       <div className="section-max" style={{paddingTop:16,paddingBottom:0}}>
-        <button className="btn-ghost" style={{display:'flex',alignItems:'center',gap:6,color:'#6b7280'}} onClick={() => setPage('home')}>
+        <button className="btn-ghost" style={{display:'flex',alignItems:'center',gap:6,color:'#6b7280'}} onClick={() => { setPage('home'); if(goView) goView('home'); }}>
           ← Tornar a curses
         </button>
       </div>
 
-      {/* Hero Image */}
-      <div style={{height:380, position:'relative', overflow:'hidden'}}>
+      {/* Hero */}
+      <div style={{height:400, position:'relative', overflow:'hidden'}}>
         <img src={race.img} alt={race.name} style={{width:'100%',height:'100%',objectFit:'cover',display:'block'}}/>
-        <div style={{position:'absolute',inset:0,background:'linear-gradient(to top,rgba(0,0,0,0.75) 0%,rgba(0,0,0,0.2) 60%,transparent 100%)'}}/>
-        <div style={{position:'absolute',bottom:0,left:0,right:0,padding:'0 32px 36px'}}>
+        <div style={{position:'absolute',inset:0,background:'linear-gradient(to top,rgba(0,0,0,0.8) 0%,rgba(0,0,0,0.15) 60%,transparent 100%)'}}/>
+        <div style={{position:'absolute',bottom:0,left:0,right:0,padding:'0 clamp(20px,4vw,80px) 36px'}}>
           <span className={`badge ${diffMap[race.dificultat]||'badge-moderate'}`} style={{marginBottom:12,display:'inline-block'}}>
             {race.dificultat} · {race.categoria}
           </span>
-          <h1 style={{fontSize:34,fontWeight:800,color:'#fff',marginBottom:10}}>
-            {race.name}
-          </h1>
-          <div style={{display:'flex',gap:20,fontSize:14,color:'rgba(255,255,255,0.9)'}}>
+          <h1 style={{fontSize:34,fontWeight:800,color:'#fff',marginBottom:10}}>{race.name}</h1>
+          <div style={{display:'flex',gap:20,fontSize:14,color:'rgba(255,255,255,0.9)',flexWrap:'wrap'}}>
             <span>📍 {race.location}</span>
             <span>📅 {race.date}</span>
             <span>📈 {race.distancia} km · +{race.desnivell.toLocaleString()}m</span>
@@ -505,64 +765,200 @@ const RacePage = ({race, setPage, user, setCurrentRegistration}) => {
         </div>
       </div>
 
-      {/* Content */}
+      {/* Stats ràpides sota el hero */}
+      <div style={{background:'#fff',borderBottom:'1px solid #e5e7eb'}}>
+        <div className="section-max" style={{paddingTop:0,paddingBottom:0}}>
+          <div className="race-stats-bar" style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(130px,1fr))',gap:0}}>
+            {[
+              {icon:'📏', label:'Distància',  value:`${race.distancia} km`},
+              {icon:'⛰️', label:'Desnivell+', value:`+${race.desnivell.toLocaleString()}m`},
+              {icon:'🍊', label:'Avituallaments', value:`${avituallaments} punts`},
+              {icon:'👤', label:'Inscrits',   value:`${race.taken}/${race.spots}`},
+              {icon:'💰', label:'Inscripció', value:`${race.preu}€`},
+              {icon:'⭐', label:'Valoració',  value:`${avgRating}/5`},
+            ].map(s => (
+              <div key={s.label} style={{padding:'16px 20px',borderRight:'1px solid #e5e7eb',textAlign:'center'}}>
+                <div style={{fontSize:18,marginBottom:4}}>{s.icon}</div>
+                <div style={{fontSize:16,fontWeight:800,color:'#1a1a1a',marginBottom:2}}>{s.value}</div>
+                <div style={{fontSize:11,color:'#9ca3af',textTransform:'uppercase',letterSpacing:'0.5px',fontWeight:600}}>{s.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Contingut principal */}
       <div className="section-max" style={{paddingTop:36,paddingBottom:48}}>
-        <div style={{display:'grid',gridTemplateColumns:'1fr 300px',gap:32,alignItems:'start'}}>
+        {/* 3 columnes: patrocinadors | contingut | sidebar */}
+        <div className="race-3col" style={{display:'grid',gridTemplateColumns:'140px 1fr 300px',gap:28,alignItems:'start'}}>
+
+          {/* Columna patrocinadors */}
+          <div style={{display:'flex',flexDirection:'column',gap:0}}>
+            <div style={{fontSize:10,fontWeight:700,color:'#9ca3af',textTransform:'uppercase',letterSpacing:'1px',marginBottom:14,textAlign:'center'}}>Patrocinadors</div>
+            {SPONSORS.map(s => (
+              <div key={s.name} title={s.name} style={{background:'#fff',border:'1px solid #e5e7eb',borderRadius:10,padding:'12px 10px',marginBottom:10,display:'flex',alignItems:'center',justifyContent:'center',minHeight:52,cursor:'pointer',transition:'box-shadow 0.2s'}}
+                onMouseOver={e=>e.currentTarget.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'}
+                onMouseOut={e=>e.currentTarget.style.boxShadow='none'}>
+                <span style={{fontSize:11,fontWeight:700,color:'#374151',textAlign:'center',lineHeight:1.3}}>{s.name}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Contingut central */}
           <div>
+            {/* Descripció */}
             <div className="card" style={{padding:28,marginBottom:20}}>
               <h2 style={{fontSize:19,fontWeight:700,marginBottom:14}}>Descripció</h2>
               <p style={{color:'#374151',lineHeight:1.75,fontSize:15}}>{race.description}</p>
             </div>
+
+            {/* Galeria fotos */}
             <div className="card" style={{padding:28,marginBottom:20}}>
-              <h2 style={{fontSize:19,fontWeight:700,marginBottom:18,color:'#16a34a'}}>✅ Inclou</h2>
-              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
-                {race.includes.map(i => (
-                  <div key={i} style={{display:'flex',alignItems:'center',gap:8,fontSize:14}}>
-                    <span style={{color:'#16a34a',fontWeight:700}}>✓</span> {i}
+              <h2 style={{fontSize:19,fontWeight:700,marginBottom:18}}>📷 Galeria</h2>
+              <div className="race-gallery" style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:10}}>
+                {galleryImgs.map((img,i) => (
+                  <div key={i} style={{height:140,borderRadius:8,overflow:'hidden'}}>
+                    <img src={img} alt={`Foto ${i+1}`} style={{width:'100%',height:'100%',objectFit:'cover',transition:'transform 0.4s',cursor:'pointer'}}
+                      onMouseOver={e=>e.currentTarget.style.transform='scale(1.06)'}
+                      onMouseOut={e=>e.currentTarget.style.transform='scale(1)'}/>
                   </div>
                 ))}
               </div>
             </div>
-            <div className="card" style={{padding:28}}>
+
+            {/* Perfil d'elevació */}
+            <div className="card" style={{padding:28,marginBottom:20}}>
+              <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:18,flexWrap:'wrap',gap:10}}>
+                <h2 style={{fontSize:19,fontWeight:700}}>📈 Perfil d'elevació</h2>
+                <a href="https://www.wikiloc.com" target="_blank" rel="noopener noreferrer"
+                  style={{display:'flex',alignItems:'center',gap:6,background:'#f59e0b',color:'#fff',padding:'6px 14px',borderRadius:8,fontSize:12,fontWeight:700,textDecoration:'none',flexShrink:0}}>
+                  🗺️ Veure a Wikiloc
+                </a>
+              </div>
+              <ElevationProfile distancia={race.distancia} desnivell={race.desnivell}/>
+              <div style={{display:'flex',justifyContent:'space-between',marginTop:10,fontSize:12,color:'#6b7280'}}>
+                <span>↑ Desnivell positiu: <strong>+{race.desnivell.toLocaleString()}m</strong></span>
+                <span>↓ Desnivell negatiu: <strong>-{Math.round(race.desnivell*0.92).toLocaleString()}m</strong></span>
+              </div>
+            </div>
+
+            {/* Inclou */}
+            <div className="card" style={{padding:28,marginBottom:20}}>
+              <h2 style={{fontSize:19,fontWeight:700,marginBottom:18,color:'#16a34a'}}>✅ Inclou</h2>
+              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
+                {(race.includes||[]).map(item => (
+                  <div key={item} style={{display:'flex',alignItems:'center',gap:8,fontSize:14}}>
+                    <span style={{color:'#16a34a',fontWeight:700}}>✓</span> {item}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Horari */}
+            <div className="card" style={{padding:28,marginBottom:20}}>
               <h2 style={{fontSize:19,fontWeight:700,marginBottom:18,color:'#16a34a'}}>🕐 Horari del dia</h2>
-              {race.schedule.map(s => (
+              {(race.schedule||[]).map(s => (
                 <div key={s.t} style={{display:'flex',gap:20,marginBottom:14,fontSize:14,alignItems:'center'}}>
-                  <span style={{color:'#9ca3af',minWidth:65,fontWeight:700,fontVariantNumeric:'tabular-nums'}}>{s.t}</span>
+                  <span style={{color:'#9ca3af',minWidth:70,fontWeight:700}}>{s.t}</span>
                   <span style={{width:6,height:6,background:'#16a34a',borderRadius:'50%',flexShrink:0}}/>
                   <span style={{color:'#374151'}}>{s.e}</span>
                 </div>
               ))}
             </div>
+
+            {/* Comentaris */}
+            <div className="card" style={{padding:28}}>
+              <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:24,flexWrap:'wrap',gap:10}}>
+                <h2 style={{fontSize:19,fontWeight:700}}>💬 Comentaris i valoracions</h2>
+                <div style={{display:'flex',alignItems:'center',gap:8}}>
+                  <StarRating rating={5}/>
+                  <span style={{fontSize:16,fontWeight:800,color:'#f59e0b'}}>{avgRating}</span>
+                  <span style={{fontSize:13,color:'#9ca3af'}}>({comments.length} valoracions)</span>
+                </div>
+              </div>
+
+              {/* Formulari nou comentari */}
+              {user ? (
+                <div style={{background:'#f9fafb',borderRadius:10,padding:16,marginBottom:24}}>
+                  <div style={{fontSize:13,fontWeight:600,marginBottom:10,color:'#374151'}}>Deixa la teva valoració:</div>
+                  <textarea value={newComment} onChange={e=>setNewComment(e.target.value)} placeholder="Comparteix la teva experiència amb altres corredors..." style={{minHeight:80,resize:'vertical',lineHeight:1.6,marginBottom:10}}/>
+                  {submitted && <div style={{color:'#16a34a',fontSize:13,fontWeight:600,marginBottom:8}}>✓ Comentari publicat!</div>}
+                  <button className="btn-green" style={{padding:'9px 20px',fontSize:13}} onClick={submitComment} disabled={!newComment.trim()}>
+                    Publicar valoració
+                  </button>
+                </div>
+              ) : (
+                <div style={{background:'#f0fdf4',border:'1px solid #bbf7d0',borderRadius:10,padding:16,marginBottom:24,fontSize:14,color:'#166534'}}>
+                  <span style={{cursor:'pointer',textDecoration:'underline',fontWeight:600}} onClick={()=>setPage('signin')}>Inicia sessió</span> per deixar la teva valoració.
+                </div>
+              )}
+
+              {/* Llista comentaris */}
+              <div style={{display:'flex',flexDirection:'column',gap:16}}>
+                {comments.map(c => (
+                  <div key={c.id} style={{borderBottom:'1px solid #f3f4f6',paddingBottom:16}}>
+                    <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:8}}>
+                      <div style={{width:36,height:36,borderRadius:'50%',background:'#1a4a2e',display:'flex',alignItems:'center',justifyContent:'center',fontSize:12,fontWeight:800,color:'#fff',flexShrink:0}}>
+                        {c.avatar}
+                      </div>
+                      <div style={{flex:1}}>
+                        <div style={{fontSize:13,fontWeight:700}}>{c.user}</div>
+                        <div style={{display:'flex',alignItems:'center',gap:8}}>
+                          <StarRating rating={c.rating}/>
+                          <span style={{fontSize:11,color:'#9ca3af'}}>{c.date}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <p style={{fontSize:14,color:'#374151',lineHeight:1.65,paddingLeft:48}}>{c.text}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* Sidebar */}
-          <div className="card" style={{padding:24,position:'sticky',top:76}}>
-            <div style={{fontSize:30,fontWeight:800,marginBottom:4}}>{race.preu}€</div>
-            <div style={{fontSize:13,color:'#6b7280',marginBottom:18}}>Preu d'inscripció</div>
-            <div style={{display:'flex',justifyContent:'space-between',fontSize:13,marginBottom:8}}>
-              <span style={{color:'#6b7280'}}>Places disponibles</span>
-              <span style={{fontWeight:700}}>{race.taken}/{race.spots}</span>
-            </div>
-            <div className="progress-bar" style={{marginBottom:22}}>
-              <div className="progress-fill" style={{width:`${pct}%`}}/>
-            </div>
-            <button className="btn-green" style={{width:'100%',padding:'14px',fontSize:15,marginBottom:14}} onClick={handleRegister}>
-              {user ? "Inscriure't ara" : "Accedir per inscriure't"}
-            </button>
-            <div style={{fontSize:12,color:'#6b7280',lineHeight:1.8}}>
-              <div>🔒 Pagament segur amb encriptació SSL</div>
-              <div>✉️ Confirmació immediata per email</div>
-              <div>👥 {race.taken} corredors ja inscrits</div>
+          <div>
+            <div className="card" style={{padding:24,position:'sticky',top:76,marginBottom:20}}>
+              <div style={{fontSize:30,fontWeight:800,marginBottom:4}}>{race.preu}€</div>
+              <div style={{fontSize:13,color:'#6b7280',marginBottom:18}}>Preu d'inscripció</div>
+              <div style={{display:'flex',justifyContent:'space-between',fontSize:13,marginBottom:8}}>
+                <span style={{color:'#6b7280'}}>Places disponibles</span>
+                <span style={{fontWeight:700}}>{race.taken}/{race.spots}</span>
+              </div>
+              <div className="progress-bar" style={{marginBottom:22}}>
+                <div className="progress-fill" style={{width:`${pct}%`}}/>
+              </div>
+              <button className="btn-green" style={{width:'100%',padding:'14px',fontSize:15,marginBottom:14}} onClick={handleRegister}>
+                {user ? "Inscriure't ara" : "Accedir per inscriure't"}
+              </button>
+              <div style={{fontSize:12,color:'#6b7280',lineHeight:2}}>
+                <div>🔒 Pagament segur SSL</div>
+                <div>✉️ Confirmació immediata</div>
+                <div>👥 {race.taken} corredors inscrits</div>
+                <div>🍊 {avituallaments} avituallaments</div>
+              </div>
             </div>
           </div>
         </div>
+
+        {/* Curses relacionades */}
+        {RACES.filter(r=>r.id!==race.id&&(r.categoria===race.categoria||r.dificultat===race.dificultat)).slice(0,3).length > 0 && (
+          <div style={{marginTop:48}}>
+            <h2 style={{fontSize:22,fontWeight:800,marginBottom:24}}>Curses relacionades</h2>
+            <div className="races-grid">
+              {RACES.filter(r=>r.id!==race.id&&(r.categoria===race.categoria||r.dificultat===race.dificultat)).slice(0,3).map(r=>(
+                <RaceCard key={r.id} race={r} onClick={()=>{ setCurrentRegistration(null); setPage('race'); window.scrollTo({top:0,behavior:'instant'}); }}/>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
       <Footer setPage={setPage}/>
     </div>
   );
 };
 
-const SignIn = ({setPage, setUser}) => {
+const SignIn = ({setPage, setUser, loginCom}) => {
   const [email, setEmail] = useState('');
   const [pw, setPw] = useState('');
   const [err, setErr] = useState('');
@@ -615,6 +1011,22 @@ const SignIn = ({setPage, setUser}) => {
           <p style={{textAlign:'center',fontSize:13,marginTop:14,color:'#9ca3af',cursor:'pointer'}} onClick={() => setPage('home')}>
             ← Tornar a l'inici
           </p>
+          {loginCom && (
+            <div style={{marginTop:24,paddingTop:20,borderTop:'1px solid #e5e7eb'}}>
+              <p style={{textAlign:'center',fontSize:11,color:'#9ca3af',marginBottom:12,fontWeight:600,textTransform:'uppercase',letterSpacing:'0.6px'}}>Accés ràpid per proves</p>
+              <div style={{display:'flex',flexDirection:'column',gap:8}}>
+                {Object.entries(ROLS).map(([rol,info]) => (
+                  <button key={rol} onClick={() => { loginCom(rol); setPage('home'); }} style={{
+                    padding:'9px 16px',borderRadius:8,border:`1.5px solid ${info.color}44`,
+                    background:info.bg,color:info.color,fontSize:13,fontWeight:600,
+                    cursor:'pointer',textAlign:'left',transition:'all 0.15s'
+                  }}>
+                    {info.icon} Entrar com a <strong>{info.label}</strong>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
       <Footer setPage={setPage}/>
@@ -688,6 +1100,8 @@ const ProfilePage = ({user, setUser, setPage, setSelectedRace}) => {
   if (!user) return null;
   const regs = user.registrations || [];
   const getRace = id => RACES.find(r => r.id === id);
+  const rolKey = (user.rol && ROLS[user.rol]) ? user.rol : 'corredor';
+  const rolInfo = ROLS[rolKey];
 
   const save = () => {
     const updated = {...user, ...form};
@@ -696,47 +1110,95 @@ const ProfilePage = ({user, setUser, setPage, setSelectedRace}) => {
     setEditing(false);
   };
 
+  // Tabs i stats diferenciats per rol
+  const esCorredor = rolKey === 'corredor';
   const tabs = [
-    {id:'profile',label:'Perfil'},
-    {id:'races',label:'Les meves curses'},
-    {id:'calendar',label:'Calendari'},
-    {id:'prefs',label:'Preferències'},
+    {id:'profile', label:'Perfil'},
+    ...(esCorredor ? [{id:'races', label:'Les meves inscripcions'}] : []),
+    {id:'prefs', label:'Preferències'},
   ];
 
   return (
     <div style={{minHeight:'80vh',display:'flex',flexDirection:'column'}}>
       <div style={{flex:1}}>
-        {/* Profile Header */}
-        <div style={{background:'linear-gradient(140deg,#052e16,#14532d)',padding:'36px 32px',color:'#fff'}}>
+
+        {/* Profile Header — color del rol */}
+        <div style={{background:`linear-gradient(140deg,#0a0a0a,${rolInfo.color}cc)`,padding:'36px 32px',color:'#fff'}}>
           <div className="section-max" style={{padding:0,display:'flex',alignItems:'center',gap:22}}>
-            <div style={{width:72,height:72,background:'rgba(255,255,255,0.15)',borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',fontSize:28,border:'2px solid rgba(255,255,255,0.3)'}}>
-              👤
+            <div style={{
+              width:72,height:72,borderRadius:'50%',flexShrink:0,
+              background:rolInfo.color,
+              display:'flex',alignItems:'center',justifyContent:'center',
+              fontSize:26,fontWeight:800,color:'#fff',
+              border:'3px solid rgba(255,255,255,0.3)',letterSpacing:'-1px'
+            }}>
+              {user.name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase()}
             </div>
             <div>
-              <h1 style={{fontSize:26,fontWeight:800}}>{user.name}</h1>
-              <p style={{opacity:0.75,fontSize:14,marginTop:4}}>{user.email}</p>
+              <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:4}}>
+                <h1 style={{fontSize:24,fontWeight:800}}>{user.name}</h1>
+                <span style={{background:'rgba(255,255,255,0.15)',border:'1px solid rgba(255,255,255,0.3)',color:'#fff',fontSize:11,fontWeight:700,padding:'2px 10px',borderRadius:20,letterSpacing:'0.5px'}}>
+                  {rolInfo.icon} {rolInfo.label}
+                </span>
+              </div>
+              <p style={{opacity:0.75,fontSize:14}}>{user.email}</p>
             </div>
           </div>
         </div>
 
-        {/* Stats */}
         <div className="section-max" style={{paddingTop:0,paddingBottom:0}}>
-          <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:16,margin:'24px 0'}}>
-            {[
-              {n:regs.length, l:'Curses inscrites'},
-              {n:regs.filter(r => getRace(r.raceId) && new Date(r.date) > new Date()).length, l:'Properes curses'},
-              {n:0, l:'Completades'},
-              {n:0, l:'Avisos pendents'}
-            ].map(s => (
-              <div className="card" key={s.l} style={{padding:22,textAlign:'center'}}>
-                <div style={{fontSize:28,fontWeight:800,color:'#16a34a'}}>{s.n}</div>
-                <div style={{fontSize:13,color:'#6b7280',marginTop:5}}>{s.l}</div>
-              </div>
-            ))}
-          </div>
+
+          {/* Stats — NOMÉS per a corredors */}
+          {esCorredor && (
+            <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:16,margin:'24px 0'}}>
+              {[
+                {n:regs.length, l:'Curses inscrites'},
+                {n:regs.filter(r => getRace(r.raceId) && new Date(r.date) > new Date()).length, l:'Properes curses'},
+                {n:0, l:'Completades'},
+                {n:0, l:'Avisos pendents'},
+              ].map(s => (
+                <div className="card" key={s.l} style={{padding:22,textAlign:'center'}}>
+                  <div style={{fontSize:28,fontWeight:800,color:'#16a34a'}}>{s.n}</div>
+                  <div style={{fontSize:13,color:'#6b7280',marginTop:5}}>{s.l}</div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Stats — per a organitzador */}
+          {rolKey === 'organitzador' && (
+            <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:16,margin:'24px 0'}}>
+              {[
+                {n:'—', l:'Curses creades', c:'#7c3aed'},
+                {n:'—', l:'Pendents aprovació', c:'#d97706'},
+                {n:'—', l:'Total inscrits', c:'#1d4ed8'},
+              ].map(s => (
+                <div className="card" key={s.l} style={{padding:22,textAlign:'center'}}>
+                  <div style={{fontSize:28,fontWeight:800,color:s.c}}>{s.n}</div>
+                  <div style={{fontSize:13,color:'#6b7280',marginTop:5}}>{s.l}</div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Stats — per a admin */}
+          {rolKey === 'admin' && (
+            <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:16,margin:'24px 0'}}>
+              {[
+                {n:'—', l:'Curses gestionades', c:'#b45309'},
+                {n:'—', l:'Usuaris registrats', c:'#1d4ed8'},
+                {n:'—', l:'Incidències obertes', c:'#dc2626'},
+              ].map(s => (
+                <div className="card" key={s.l} style={{padding:22,textAlign:'center'}}>
+                  <div style={{fontSize:28,fontWeight:800,color:s.c}}>{s.n}</div>
+                  <div style={{fontSize:13,color:'#6b7280',marginTop:5}}>{s.l}</div>
+                </div>
+              ))}
+            </div>
+          )}
 
           {/* Tabs */}
-          <div style={{borderBottom:'1px solid #e5e7eb',display:'flex',gap:4,marginBottom:28}}>
+          <div style={{borderBottom:'1px solid #e5e7eb',display:'flex',gap:4,marginBottom:28,marginTop: esCorredor ? 0 : 8}}>
             {tabs.map(t => (
               <button key={t.id} className={`tab ${tab === t.id ? 'active' : ''}`} onClick={() => setTab(t.id)}>
                 {t.label}
@@ -744,7 +1206,7 @@ const ProfilePage = ({user, setUser, setPage, setSelectedRace}) => {
             ))}
           </div>
 
-          {/* Tab: Profile */}
+          {/* Tab: Perfil (comú a tots els rols) */}
           {tab === 'profile' && (
             <div className="card" style={{padding:32,maxWidth:580,marginBottom:40}}>
               <h2 style={{fontSize:18,fontWeight:700,marginBottom:26}}>Informació personal</h2>
@@ -765,10 +1227,10 @@ const ProfilePage = ({user, setUser, setPage, setSelectedRace}) => {
                 <>
                   <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:22,marginBottom:28}}>
                     {[
-                      {label:'Nom complet', value:user.name, icon:'👤'},
-                      {label:'Email', value:user.email, icon:'✉️'},
-                      {label:'Telèfon', value:user.phone||'No especificat', icon:'📞'},
-                      {label:'Membre des de', value:user.since||'2026', icon:'📅'},
+                      {label:'Nom complet',   value:user.name,              icon:'👤'},
+                      {label:'Email',          value:user.email,             icon:'✉️'},
+                      {label:'Telèfon',        value:user.phone||'No especificat', icon:'📞'},
+                      {label:'Membre des de',  value:user.since||'2026',     icon:'📅'},
                     ].map(f => (
                       <div key={f.label}>
                         <div style={{fontSize:12,color:'#9ca3af',marginBottom:6,fontWeight:600,textTransform:'uppercase',letterSpacing:'0.5px'}}>{f.label}</div>
@@ -784,8 +1246,8 @@ const ProfilePage = ({user, setUser, setPage, setSelectedRace}) => {
             </div>
           )}
 
-          {/* Tab: Races */}
-          {tab === 'races' && (
+          {/* Tab: Inscripcions — NOMÉS corredor */}
+          {tab === 'races' && esCorredor && (
             <div style={{marginBottom:40}}>
               <h2 style={{fontSize:18,fontWeight:700,marginBottom:22}}>Les meves inscripcions ({regs.length})</h2>
               {regs.length === 0 ? (
@@ -801,9 +1263,9 @@ const ProfilePage = ({user, setUser, setPage, setSelectedRace}) => {
                     const race = getRace(reg.raceId);
                     if (!race) return null;
                     return (
-                      <div key={i} className="card" style={{padding:22,display:'flex',gap:22,alignItems:'center',cursor:'pointer',transition:'box-shadow 0.2s'}}
+                      <div key={i} className="card" style={{padding:22,display:'flex',gap:22,alignItems:'center',cursor:'pointer'}}
                         onClick={() => { setSelectedRace(race); setPage('race'); }}>
-                        <div style={{fontSize:44,width:60,textAlign:'center'}}>{race.emoji}</div>
+                        <img src={race.img} alt={race.name} style={{width:64,height:64,objectFit:'cover',borderRadius:8,flexShrink:0}}/>
                         <div style={{flex:1}}>
                           <h3 style={{fontSize:15,fontWeight:700,marginBottom:6}}>{race.name}</h3>
                           <div style={{fontSize:13,color:'#6b7280',marginBottom:2}}>{race.date} · {race.location}</div>
@@ -811,9 +1273,7 @@ const ProfilePage = ({user, setUser, setPage, setSelectedRace}) => {
                         </div>
                         <div style={{textAlign:'right'}}>
                           <div style={{fontWeight:800,fontSize:17,marginBottom:8}}>{reg.paid}€</div>
-                          <span style={{background:'#dcfce7',color:'#166534',padding:'5px 12px',borderRadius:20,fontSize:12,fontWeight:700}}>
-                            ✓ Confirmada
-                          </span>
+                          <span style={{background:'#dcfce7',color:'#166534',padding:'5px 12px',borderRadius:20,fontSize:12,fontWeight:700}}>✓ Confirmada</span>
                         </div>
                       </div>
                     );
@@ -823,19 +1283,13 @@ const ProfilePage = ({user, setUser, setPage, setSelectedRace}) => {
             </div>
           )}
 
-          {tab === 'calendar' && (
-            <div style={{textAlign:'center',padding:'60px 24px',color:'#6b7280',marginBottom:40}}>
-              <div style={{fontSize:56,marginBottom:18}}>📅</div>
-              <p style={{fontSize:16,fontWeight:500}}>El calendari personal estarà disponible aviat.</p>
-            </div>
-          )}
-
           {tab === 'prefs' && (
             <div style={{textAlign:'center',padding:'60px 24px',color:'#6b7280',marginBottom:40}}>
               <div style={{fontSize:56,marginBottom:18}}>⚙️</div>
               <p style={{fontSize:16,fontWeight:500}}>Les preferències estaran disponibles aviat.</p>
             </div>
           )}
+
         </div>
       </div>
       <Footer setPage={setPage}/>
@@ -850,6 +1304,7 @@ const PaymentPage = ({race, user, setPage, setUser, setCurrentRegistration}) => 
   const [emergency, setEmergency] = useState('');
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState('');
+  const [confirmed, setConfirmed] = useState(false);
 
   if (!race || !user) return null;
   const setC = (k, v) => setCard(c => ({...c, [k]: v}));
@@ -871,17 +1326,18 @@ const PaymentPage = ({race, user, setPage, setUser, setCurrentRegistration}) => 
       localStorage.setItem('ct_user', JSON.stringify(updated));
       setUser(updated);
       setLoading(false);
-      setPage('confirmation');
+      setConfirmed(true);
     }, 2000);
   };
 
   const payMethods = [
-    {id:'card', label:'Targeta de crèdit/dèbit', icon:'💳'},
-    {id:'paypal', label:'PayPal', icon:'🅿'},
-    {id:'redsys', label:'Redsys', icon:'🏦'},
+    {id:'card',   label:'Targeta de crèdit/dèbit', icon:'💳'},
+    {id:'paypal', label:'PayPal',                  icon:'🅿'},
   ];
 
   return (
+    <>
+    {confirmed && <ConfirmationPopup race={race} user={user} setPage={setPage} onClose={() => { setConfirmed(false); scrollTop(); }}/>}
     <div style={{minHeight:'80vh',display:'flex',flexDirection:'column'}}>
       <div style={{flex:1,background:'#f9fafb',padding:'20px 32px 56px'}}>
         <div className="section-max" style={{padding:0}}>
@@ -953,12 +1409,6 @@ const PaymentPage = ({race, user, setPage, setUser, setCurrentRegistration}) => 
                   </div>
                 )}
 
-                {payMethod === 'redsys' && (
-                  <div style={{marginTop:20,padding:'20px',background:'#f0fdf4',borderRadius:10,fontSize:14,color:'#166534',textAlign:'center'}}>
-                    Seràs redirigit a la plataforma segura de Redsys per completar el pagament.
-                  </div>
-                )}
-
                 {err && <div className="alert-error" style={{marginTop:16}}>{err}</div>}
 
                 <button className="btn-green" style={{width:'100%',marginTop:22,padding:'15px',fontSize:15}} onClick={pay} disabled={loading}>
@@ -999,36 +1449,808 @@ const PaymentPage = ({race, user, setPage, setUser, setCurrentRegistration}) => 
       </div>
       <Footer setPage={setPage}/>
     </div>
+    </>
   );
 };
 
-const ConfirmationPage = ({race, user, setPage}) => {
-  const [count, setCount] = useState(5);
-  useEffect(() => {
-    const t = setInterval(() => setCount(c => { if (c <= 1) { clearInterval(t); setPage('profile'); return 0; } return c - 1; }), 1000);
-    return () => clearInterval(t);
-  }, []);
-
+/* ── POPUP CONFIRMACIÓ (substitueix ConfirmationPage) ── */
+const ConfirmationPopup = ({race, user, onClose, setPage}) => {
   if (!race) return null;
+  const handlePrint = () => window.print();
+  return (
+    <>
+      {/* Backdrop */}
+      <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.6)',zIndex:500,display:'flex',alignItems:'center',justifyContent:'center',padding:24}} onClick={onClose}>
+        <div style={{background:'#fff',borderRadius:20,padding:40,maxWidth:500,width:'100%',textAlign:'center',position:'relative',boxShadow:'0 24px 64px rgba(0,0,0,0.25)'}}
+          onClick={e => e.stopPropagation()}>
+          {/* Botó tancar */}
+          <button onClick={onClose} style={{position:'absolute',top:16,right:16,background:'#f3f4f6',border:'none',width:36,height:36,borderRadius:'50%',cursor:'pointer',fontSize:18,display:'flex',alignItems:'center',justifyContent:'center',color:'#6b7280'}}>✕</button>
+
+          {/* Icona èxit */}
+          <div style={{width:80,height:80,background:'#dcfce7',borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',fontSize:36,margin:'0 auto 20px',border:'3px solid #bbf7d0'}}>✅</div>
+
+          <h1 style={{fontSize:26,fontWeight:800,marginBottom:10,color:'#14532d'}}>Inscripció confirmada!</h1>
+          <p style={{color:'#6b7280',marginBottom:24,lineHeight:1.7,fontSize:14}}>
+            T'hem enviat un email de confirmació amb tots els detalls. Guarda aquest comprovant per al dia de la cursa.
+          </p>
+
+          {/* Comprovant */}
+          <div style={{background:'#f0fdf4',border:'2px solid #bbf7d0',borderRadius:12,padding:'20px 24px',marginBottom:24,textAlign:'left'}}>
+            <div style={{fontSize:11,fontWeight:700,color:'#16a34a',textTransform:'uppercase',letterSpacing:'1px',marginBottom:10}}>Comprovant d'inscripció</div>
+            <div style={{fontSize:16,fontWeight:800,color:'#14532d',marginBottom:8}}>{race.name}</div>
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8,fontSize:13,color:'#374151'}}>
+              <div>📅 {race.date}</div>
+              <div>📍 {race.location}</div>
+              <div>📈 {race.distancia} km</div>
+              <div>💰 {race.preu}€ pagat</div>
+            </div>
+            {user && <div style={{marginTop:10,fontSize:13,color:'#6b7280',borderTop:'1px solid #bbf7d0',paddingTop:10}}>👤 {user.name} · {user.email}</div>}
+          </div>
+
+          {/* Accions */}
+          <div style={{display:'flex',gap:10,flexWrap:'wrap',justifyContent:'center',marginBottom:16}}>
+            <button className="btn-green" style={{flex:1,minWidth:130,padding:'11px'}} onClick={() => { onClose(); setPage('profile'); scrollTop(); }}>
+              👤 Veure perfil
+            </button>
+            <button className="btn-outline" style={{flex:1,minWidth:130,padding:'11px'}} onClick={handlePrint}>
+              🖨️ Imprimir / PDF
+            </button>
+          </div>
+          <button style={{background:'none',border:'none',color:'#9ca3af',fontSize:13,cursor:'pointer'}} onClick={() => { onClose(); setPage('home'); scrollTop(); }}>
+            ← Tornar a les curses
+          </button>
+        </div>
+      </div>
+    </>
+  );
+};
+
+/* ── NAV amb rols i view ── */
+const Nav = ({page, setPage, user, logout, loginCom, view, setView}) => {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [avatarOpen, setAvatarOpen] = useState(false);
+
+  const nav = (p) => { setPage(p); setMenuOpen(false); setAvatarOpen(false); scrollTop(); };
+  const goV = (v) => { setView(v); setMenuOpen(false); setAvatarOpen(false); scrollTop(); };
+
+  // Fallback segur: si l'usuari no té rol vàlid, usem 'corredor'
+  const rolKey = (user?.rol && ROLS[user.rol]) ? user.rol : 'corredor';
+  const rolInfo = user ? (ROLS[rolKey] || ROLS.corredor) : null;
+  const inicials = user ? user.name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase() : '';
+
+  // Menú avatar segons rol
+  const avatarMenuItems = user ? [
+    ...(rolKey === 'corredor'     ? [{label:'Les meves inscripcions', icon:'🏅', v:'inscripcions'}] : []),
+    ...(rolKey === 'organitzador' ? [{label:'Publicar cursa', icon:'➕', v:'formulari-proposta'}, {label:'Les meves curses', icon:'📋', v:'curses-organitzador'}] : []),
+    ...(rolKey === 'admin'        ? [{label:'Gestionar curses', icon:'⚙️', v:'admin-panel'}] : []),
+    {label:'El meu perfil', icon:'👤', action: () => nav('profile')},
+  ] : [];
+
+  return (
+    <>
+      <nav>
+        <div className="logo" onClick={() => goV('home')}>
+          <LogoSVG size={42}/>
+          <span className="logo-text">Communitrail</span>
+        </div>
+
+        {/* Desktop links */}
+        <div className="nav-links">
+          <button className="btn-ghost" style={{fontWeight: view==='home'?700:400, color: view==='home'?'#1a4a2e':'#374151'}} onClick={() => goV('home')}>Inici</button>
+          <button className="btn-ghost" style={{fontWeight: view==='arxiu'?700:400, color: view==='arxiu'?'#1a4a2e':'#374151'}} onClick={() => goV('arxiu')}>Curses</button>
+          <button className="btn-ghost" style={{fontWeight: view==='noticies'?700:400, color: view==='noticies'?'#1a4a2e':'#374151'}} onClick={() => goV('noticies')}>Notícies</button>
+          <button className="btn-ghost" style={{fontWeight: view==='contacte'?700:400, color: view==='contacte'?'#1a4a2e':'#374151'}} onClick={() => goV('contacte')}>Contacte</button>
+
+          {user ? (
+            <div style={{position:'relative'}}>
+              {/* Avatar desktop */}
+              <button onClick={() => setAvatarOpen(o=>!o)} style={{
+                display:'flex',alignItems:'center',gap:9,background:rolInfo.bg,
+                border:`1.5px solid ${rolInfo.color}33`,borderRadius:24,
+                padding:'5px 14px 5px 5px',cursor:'pointer',transition:'box-shadow 0.2s'
+              }}
+              onMouseOver={e=>e.currentTarget.style.boxShadow=`0 0 0 3px ${rolInfo.color}22`}
+              onMouseOut={e=>e.currentTarget.style.boxShadow='none'}>
+                <div style={{width:32,height:32,borderRadius:'50%',background:rolInfo.color,display:'flex',alignItems:'center',justifyContent:'center',fontSize:12,fontWeight:800,color:'#fff'}}>
+                  {inicials}
+                </div>
+                <div style={{textAlign:'left'}}>
+                  <div style={{fontSize:13,fontWeight:700,color:rolInfo.color,lineHeight:1.2}}>{user.name.split(' ')[0]}</div>
+                  <div style={{fontSize:10,color:rolInfo.color,opacity:0.75,fontWeight:600}}>{rolInfo.icon} {rolInfo.label}</div>
+                </div>
+                <span style={{fontSize:10,color:rolInfo.color,marginLeft:2}}>{avatarOpen?'▲':'▼'}</span>
+              </button>
+
+              {/* Dropdown avatar */}
+              {avatarOpen && (
+                <>
+                  <div style={{position:'fixed',inset:0,zIndex:149}} onClick={() => setAvatarOpen(false)}/>
+                  <div style={{position:'absolute',right:0,top:'calc(100% + 8px)',background:'#fff',border:'1px solid #e5e7eb',borderRadius:12,boxShadow:'0 8px 32px rgba(0,0,0,0.12)',minWidth:220,zIndex:150,overflow:'hidden'}}>
+                    <div style={{padding:'14px 16px 10px',borderBottom:'1px solid #f3f4f6'}}>
+                      <div style={{fontSize:13,fontWeight:700,color:'#1a1a1a'}}>{user.name}</div>
+                      <div style={{fontSize:12,color:'#6b7280'}}>{user.email}</div>
+                      <span style={{display:'inline-block',marginTop:6,background:rolInfo.bg,color:rolInfo.color,fontSize:10,fontWeight:700,padding:'2px 8px',borderRadius:20}}>{rolInfo.icon} {rolInfo.label}</span>
+                    </div>
+                    {avatarMenuItems.map(item => (
+                      <button key={item.label} onClick={item.action ? item.action : () => goV(item.v)} style={{
+                        display:'block',width:'100%',textAlign:'left',padding:'11px 16px',
+                        background:'none',border:'none',cursor:'pointer',fontSize:13,fontWeight:500,
+                        color:'#374151',transition:'background 0.15s'
+                      }}
+                      onMouseOver={e=>e.currentTarget.style.background='#f9fafb'}
+                      onMouseOut={e=>e.currentTarget.style.background='none'}>
+                        {item.icon} {item.label}
+                      </button>
+                    ))}
+                    <div style={{borderTop:'1px solid #f3f4f6',padding:'4px 0'}}>
+                      <button onClick={logout} style={{display:'block',width:'100%',textAlign:'left',padding:'11px 16px',background:'none',border:'none',cursor:'pointer',fontSize:13,fontWeight:500,color:'#dc2626'}}
+                        onMouseOver={e=>e.currentTarget.style.background='#fef2f2'}
+                        onMouseOut={e=>e.currentTarget.style.background='none'}>
+                        ↩ Tancar sessió
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          ) : (
+            <>
+              <button className="btn-ghost" onClick={() => nav('signin')}>Accedir</button>
+              <button className="btn-green" style={{padding:'9px 18px',fontSize:13}} onClick={() => nav('signup')}>Registrar-se</button>
+            </>
+          )}
+        </div>
+
+        {/* Mobile right zone */}
+        <div style={{display:'none',alignItems:'center',gap:10}} className="mobile-nav-right">
+          {user ? (
+            <button onClick={() => setMenuOpen(o=>!o)} style={{display:'flex',alignItems:'center',gap:8,background:rolInfo.bg,border:`1.5px solid ${rolInfo.color}44`,borderRadius:24,padding:'5px 12px 5px 5px',cursor:'pointer'}}>
+              <div style={{width:30,height:30,borderRadius:'50%',background:rolInfo.color,display:'flex',alignItems:'center',justifyContent:'center',fontSize:12,fontWeight:800,color:'#fff',flexShrink:0}}>
+                {inicials}
+              </div>
+              <span style={{fontSize:13,fontWeight:700,color:rolInfo.color,fontFamily:"'Poppins',sans-serif"}}>{user.name.split(' ')[0]}</span>
+            </button>
+          ) : (
+            <button onClick={() => nav('signin')} style={{display:'flex',alignItems:'center',gap:7,background:'#f3f4f6',border:'1.5px solid #e5e7eb',borderRadius:24,padding:'5px 12px 5px 5px',cursor:'pointer'}}>
+              <div style={{width:30,height:30,borderRadius:'50%',background:'#d1d5db',display:'flex',alignItems:'center',justifyContent:'center',fontSize:15,flexShrink:0}}>👤</div>
+              <span style={{fontSize:13,fontWeight:600,color:'#6b7280',fontFamily:"'Poppins',sans-serif"}}>Convidat</span>
+            </button>
+          )}
+          <button className={`hamburger ${menuOpen ? 'open' : ''}`} onClick={() => setMenuOpen(o => !o)} aria-label="Menú">
+            <span/><span/><span/>
+          </button>
+        </div>
+        <button className={`hamburger hamburger-solo ${menuOpen ? 'open' : ''}`} onClick={() => setMenuOpen(o => !o)} aria-label="Menú">
+          <span/><span/><span/>
+        </button>
+      </nav>
+
+      {/* Mobile overlay + panel */}
+      <div className={`mobile-menu-overlay ${menuOpen ? 'open' : ''}`} onClick={() => setMenuOpen(false)}/>
+      <div className={`mobile-menu ${menuOpen ? 'open' : ''}`}>
+        <button className="mob-link" onClick={() => goV('home')}>🏠 Inici</button>
+        <button className="mob-link" onClick={() => goV('arxiu')}>🏃 Curses</button>
+        <button className="mob-link" onClick={() => goV('noticies')}>📰 Notícies</button>
+        <button className="mob-link" onClick={() => goV('contacte')}>✉️ Contacte</button>
+        <div style={{height:8,borderBottom:'1px solid #f3f4f6',marginBottom:8}}/>
+        {user ? (
+          <>
+            {avatarMenuItems.map(item => (
+              <button key={item.label} className="mob-link" onClick={item.action ? item.action : () => goV(item.v)}>
+                {item.icon} {item.label}
+              </button>
+            ))}
+            <button className="mob-link" style={{color:'#dc2626'}} onClick={logout}>↩ Tancar sessió</button>
+          </>
+        ) : (
+          <div style={{display:'flex',flexDirection:'column',gap:12,marginTop:8}}>
+            <button className="btn-outline" style={{width:'100%',padding:'13px',fontSize:15}} onClick={() => nav('signin')}>Accedir</button>
+            <button className="btn-green"   style={{width:'100%',padding:'13px',fontSize:15}} onClick={() => nav('signup')}>Registrar-se gratis</button>
+          </div>
+        )}
+      </div>
+    </>
+  );
+};
+
+/* ── VISTA: CONTACTE ── */
+const ContactePage = ({setPage}) => {
+  const [sent, setSent] = useState(false);
+  const [form, setForm] = useState({nom:'',email:'',assumpte:'',missatge:''});
+  const set = (k,v) => setForm(f=>({...f,[k]:v}));
   return (
     <div style={{minHeight:'80vh',display:'flex',flexDirection:'column'}}>
-      <div style={{flex:1,background:'#f0fdf4',display:'flex',alignItems:'center',justifyContent:'center',padding:'48px 24px'}}>
-        <div className="card" style={{padding:48,width:'100%',maxWidth:480,textAlign:'center'}}>
-          <div className="success-circle">✅</div>
-          <h1 style={{fontSize:28,fontWeight:800,marginBottom:14,color:'#14532d'}}>Inscripció confirmada!</h1>
-          <p style={{color:'#6b7280',marginBottom:32,lineHeight:1.7,fontSize:15}}>
-            T'hem enviat un email de confirmació amb tots els detalls de la teva inscripció.
-          </p>
-          <div style={{background:'#f0fdf4',border:'2px solid #bbf7d0',borderRadius:12,padding:'20px 24px',marginBottom:32}}>
-            <div style={{fontSize:17,fontWeight:700,color:'#15803d',marginBottom:6}}>{race.name}</div>
-            <div style={{fontSize:14,color:'#6b7280',marginBottom:2}}>{race.date}</div>
-            <div style={{fontSize:14,color:'#6b7280'}}>{race.location}</div>
+      <div style={{flex:1,padding:'56px 0'}}>
+        <div className="section-max">
+          {/* Capçalera */}
+          <div style={{maxWidth:600,marginBottom:48}}>
+            <span style={{display:'inline-block',background:'#f0fdf4',color:'#16a34a',fontSize:11,fontWeight:700,letterSpacing:'1.5px',textTransform:'uppercase',padding:'5px 14px',borderRadius:20,marginBottom:16,border:'1px solid #bbf7d0'}}>
+              Contacte
+            </span>
+            <h1 style={{fontSize:36,fontWeight:800,marginBottom:12,color:'#1a1a1a'}}>Estem aquí per ajudar-te</h1>
+            <p style={{fontSize:16,color:'#6b7280',lineHeight:1.7}}>Tens dubtes sobre una cursa, vols organitzar un event o necessites suport? Escriu-nos i et respondrem en menys de 24h.</p>
           </div>
-          <div style={{display:'flex',gap:14,justifyContent:'center',marginBottom:24}}>
-            <button className="btn-green" onClick={() => setPage('profile')}>Veure el meu perfil</button>
-            <button className="btn-outline" onClick={() => setPage('home')}>Explorar més curses</button>
+
+          <div style={{display:'grid',gridTemplateColumns:'1fr 380px',gap:40,alignItems:'start'}}>
+            {/* Formulari */}
+            {sent ? (
+              <div className="card" style={{padding:48,textAlign:'center'}}>
+                <div style={{fontSize:56,marginBottom:16}}>✅</div>
+                <h2 style={{fontSize:22,fontWeight:700,marginBottom:10,color:'#14532d'}}>Missatge enviat!</h2>
+                <p style={{color:'#6b7280',marginBottom:24}}>Gràcies per contactar amb nosaltres. Et respondrem aviat.</p>
+                <button className="btn-green" onClick={() => setSent(false)}>Enviar un altre missatge</button>
+              </div>
+            ) : (
+              <div className="card" style={{padding:32}}>
+                <h2 style={{fontSize:18,fontWeight:700,marginBottom:24}}>Envia'ns un missatge</h2>
+                <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16}}>
+                  <div className="input-group"><label>Nom *</label><input placeholder="El teu nom" value={form.nom} onChange={e=>set('nom',e.target.value)}/></div>
+                  <div className="input-group"><label>Email *</label><input type="email" placeholder="tu@email.com" value={form.email} onChange={e=>set('email',e.target.value)}/></div>
+                </div>
+                <div className="input-group"><label>Assumpte *</label>
+                  <select value={form.assumpte} onChange={e=>set('assumpte',e.target.value)}>
+                    <option value="">Selecciona un tema...</option>
+                    <option>Dubtes sobre inscripció</option>
+                    <option>Organitzar una cursa</option>
+                    <option>Problema tècnic</option>
+                    <option>Col·laboració o patrocini</option>
+                    <option>Altres</option>
+                  </select>
+                </div>
+                <div className="input-group">
+                  <label>Missatge *</label>
+                  <textarea placeholder="Explica'ns en què podem ajudar-te..." value={form.missatge} onChange={e=>set('missatge',e.target.value)} style={{minHeight:130,resize:'vertical',lineHeight:1.6}}/>
+                </div>
+                <button className="btn-green" style={{width:'100%',padding:'13px'}}
+                  onClick={() => { if(form.nom&&form.email&&form.assumpte&&form.missatge) setSent(true); }}>
+                  Enviar missatge →
+                </button>
+              </div>
+            )}
+
+            {/* Info lateral */}
+            <div style={{display:'flex',flexDirection:'column',gap:16}}>
+              {[
+                {icon:'📧', title:'Email', text:'hola@communitrail.com', sub:'Resposta en menys de 24h'},
+                {icon:'📞', title:'Telèfon', text:'+34 900 123 456', sub:'Dl–Dv, 9:00–18:00'},
+                {icon:'📍', title:'Oficines', text:'Carrer de la Muntanya, 42', sub:'08001 Barcelona'},
+              ].map(item => (
+                <div key={item.title} className="card" style={{padding:'20px 22px',display:'flex',gap:16,alignItems:'flex-start'}}>
+                  <div style={{width:44,height:44,background:'#f0fdf4',borderRadius:10,display:'flex',alignItems:'center',justifyContent:'center',fontSize:20,flexShrink:0}}>{item.icon}</div>
+                  <div>
+                    <div style={{fontWeight:700,fontSize:14,marginBottom:2}}>{item.title}</div>
+                    <div style={{fontSize:14,color:'#374151',fontWeight:500}}>{item.text}</div>
+                    <div style={{fontSize:12,color:'#9ca3af',marginTop:2}}>{item.sub}</div>
+                  </div>
+                </div>
+              ))}
+              <div className="card" style={{padding:'20px 22px',background:'linear-gradient(135deg,#f0fdf4,#dcfce7)',border:'1px solid #bbf7d0'}}>
+                <div style={{fontWeight:700,fontSize:14,marginBottom:6,color:'#14532d'}}>🏔️ Vols organitzar una cursa?</div>
+                <p style={{fontSize:13,color:'#166534',lineHeight:1.6,marginBottom:12}}>Uneix-te a la nostra xarxa d'organitzadors i arriba a milers de corredors.</p>
+                <button className="btn-green" style={{width:'100%',padding:'10px',fontSize:13}}>Saber-ne més</button>
+              </div>
+            </div>
           </div>
-          <p style={{fontSize:12,color:'#9ca3af'}}>Redirigint al teu perfil en {count} segon{count !== 1 ? 's' : ''}...</p>
+        </div>
+      </div>
+      <Footer setPage={setPage}/>
+    </div>
+  );
+};
+
+/* ── VISTA CORREDOR: Les meves inscripcions ── */
+const InscripcionsView = ({user, setPage, setSelectedRace}) => {
+  if (!user) return (
+    <div style={{textAlign:'center',padding:'80px 24px'}}>
+      <div style={{fontSize:48,marginBottom:16}}>🔒</div>
+      <p style={{marginBottom:20,fontSize:16,color:'#6b7280'}}>Has d'iniciar sessió per veure les teves inscripcions.</p>
+      <button className="btn-green" onClick={() => setPage('signin')}>Iniciar sessió</button>
+    </div>
+  );
+  const regs = user.registrations || [];
+  const getRace = id => RACES.find(r => r.id === id);
+  return (
+    <div style={{minHeight:'70vh',display:'flex',flexDirection:'column'}}>
+      <div style={{flex:1,padding:'52px 0 64px'}}>
+        <div className="section-max">
+          <div style={{marginBottom:32}}>
+            <span style={{display:'inline-block',background:ROLS.corredor.bg,color:ROLS.corredor.color,fontSize:11,fontWeight:700,letterSpacing:'1.5px',textTransform:'uppercase',padding:'5px 14px',borderRadius:20,marginBottom:14,border:`1px solid ${ROLS.corredor.color}33`}}>
+              🏅 Corredor
+            </span>
+            <h1 style={{fontSize:28,fontWeight:800,marginBottom:6}}>Les meves inscripcions</h1>
+            <p style={{color:'#6b7280'}}>Historial complet de les teves curses</p>
+          </div>
+          {regs.length === 0 ? (
+            <div style={{textAlign:'center',padding:'64px 24px',background:'#fff',borderRadius:16,border:'1.5px dashed #d1d5db'}}>
+              <div style={{fontSize:56,marginBottom:16}}>🏃</div>
+              <h3 style={{fontSize:18,fontWeight:700,marginBottom:8}}>Encara no t'has inscrit a cap cursa</h3>
+              <p style={{color:'#6b7280',marginBottom:24}}>Explora les properes curses i viu la muntanya!</p>
+              <button className="btn-green" onClick={() => setPage('home')}>Explorar curses</button>
+            </div>
+          ) : (
+            <div style={{display:'flex',flexDirection:'column',gap:16}}>
+              {regs.map((reg,i) => {
+                const race = getRace(reg.raceId);
+                if (!race) return null;
+                return (
+                  <div key={i} className="card" style={{padding:22,display:'flex',gap:20,alignItems:'center',cursor:'pointer'}}
+                    onClick={() => { setSelectedRace(race); setPage('race'); }}>
+                    <img src={race.img} alt={race.name} style={{width:80,height:80,objectFit:'cover',borderRadius:10,flexShrink:0}}/>
+                    <div style={{flex:1}}>
+                      <h3 style={{fontSize:15,fontWeight:700,marginBottom:4}}>{race.name}</h3>
+                      <div style={{fontSize:13,color:'#6b7280'}}>{race.date} · {race.location}</div>
+                      <div style={{fontSize:13,color:'#6b7280'}}>{race.distancia} km · +{race.desnivell.toLocaleString()}m · Talla: {reg.tshirt}</div>
+                    </div>
+                    <div style={{textAlign:'right'}}>
+                      <div style={{fontWeight:800,fontSize:17,marginBottom:8}}>{reg.paid}€</div>
+                      <span style={{background:'#dcfce7',color:'#166534',padding:'4px 12px',borderRadius:20,fontSize:12,fontWeight:700}}>✓ Confirmada</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </div>
+      <Footer setPage={setPage}/>
+    </div>
+  );
+};
+
+/* ── VISTA ADMIN: Aprovació de curses ── */
+const AdminView = ({races, aprovarCursa}) => {
+  const pendents = races.filter(r => r.estat === 'pendent');
+  const publicades = races.filter(r => r.estat === 'publicada');
+  return (
+    <div style={{minHeight:'70vh',padding:'52px 0 64px'}}>
+      <div className="section-max">
+        <div style={{marginBottom:36}}>
+          <span style={{display:'inline-block',background:ROLS.admin.bg,color:ROLS.admin.color,fontSize:11,fontWeight:700,letterSpacing:'1.5px',textTransform:'uppercase',padding:'5px 14px',borderRadius:20,marginBottom:14,border:`1px solid ${ROLS.admin.color}33`}}>
+            ⚙️ Admin
+          </span>
+          <h1 style={{fontSize:28,fontWeight:800,marginBottom:6}}>Gestió de curses</h1>
+          <p style={{color:'#6b7280'}}>Revisa i aprova les curses proposades pels organitzadors</p>
+        </div>
+
+        {/* Stats ràpides */}
+        <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(180px,1fr))',gap:16,marginBottom:40}}>
+          {[
+            {n:races.length, l:'Total curses', c:'#1a4a2e', bg:'#f0fdf4'},
+            {n:publicades.length, l:'Publicades', c:'#16a34a', bg:'#dcfce7'},
+            {n:pendents.length, l:'Pendents aprovació', c:'#d97706', bg:'#fef3c7'},
+          ].map(s => (
+            <div key={s.l} className="card" style={{padding:20,textAlign:'center'}}>
+              <div style={{fontSize:28,fontWeight:800,color:s.c}}>{s.n}</div>
+              <div style={{fontSize:13,color:'#6b7280',marginTop:4}}>{s.l}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Curses pendents */}
+        <h2 style={{fontSize:18,fontWeight:700,marginBottom:16}}>
+          Pendents d'aprovació
+          {pendents.length > 0 && <span style={{background:'#fef3c7',color:'#92400e',fontSize:12,fontWeight:700,padding:'2px 9px',borderRadius:20,marginLeft:10}}>{pendents.length}</span>}
+        </h2>
+        {pendents.length === 0 ? (
+          <div style={{padding:'40px',textAlign:'center',background:'#fff',borderRadius:12,border:'1.5px dashed #d1d5db',marginBottom:40}}>
+            <div style={{fontSize:40,marginBottom:12}}>✅</div>
+            <p style={{color:'#6b7280',fontWeight:500}}>No hi ha curses pendents d'aprovació.</p>
+          </div>
+        ) : (
+          <div style={{display:'flex',flexDirection:'column',gap:14,marginBottom:40}}>
+            {pendents.map(r => (
+              <div key={r.id} className="card" style={{padding:20,display:'flex',gap:18,alignItems:'center'}}>
+                <img src={r.img} alt={r.name} style={{width:72,height:72,objectFit:'cover',borderRadius:8,flexShrink:0}}/>
+                <div style={{flex:1}}>
+                  <div style={{display:'flex',gap:8,alignItems:'center',marginBottom:4}}>
+                    <h3 style={{fontSize:15,fontWeight:700}}>{r.name}</h3>
+                    <span style={{background:'#fef3c7',color:'#92400e',fontSize:10,fontWeight:700,padding:'2px 8px',borderRadius:20}}>PENDENT</span>
+                  </div>
+                  <div style={{fontSize:13,color:'#6b7280'}}>{r.location} · {r.date}</div>
+                  <div style={{fontSize:13,color:'#6b7280'}}>{r.distancia} km · +{r.desnivell?.toLocaleString()}m · {r.preu}€</div>
+                </div>
+                <button className="btn-green" style={{padding:'9px 20px',fontSize:13,flexShrink:0}} onClick={() => aprovarCursa(r.id)}>
+                  ✓ Aprovar
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Curses publicades */}
+        <h2 style={{fontSize:18,fontWeight:700,marginBottom:16}}>Curses publicades ({publicades.length})</h2>
+        <div style={{display:'flex',flexDirection:'column',gap:12}}>
+          {publicades.map(r => (
+            <div key={r.id} className="card" style={{padding:'16px 20px',display:'flex',gap:16,alignItems:'center'}}>
+              <img src={r.img} alt={r.name} style={{width:56,height:56,objectFit:'cover',borderRadius:8,flexShrink:0}}/>
+              <div style={{flex:1}}>
+                <div style={{fontSize:14,fontWeight:700}}>{r.name}</div>
+                <div style={{fontSize:12,color:'#6b7280'}}>{r.location} · {r.preu}€ · {r.taken}/{r.spots} inscrits</div>
+              </div>
+              <span style={{background:'#dcfce7',color:'#166534',fontSize:11,fontWeight:700,padding:'3px 10px',borderRadius:20}}>✓ Publicada</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* ── VISTA ORGANITZADOR: Formulari proposta cursa ── */
+const FormulariProposta = ({afegirCursa, goView}) => {
+  const [sent, setSent] = useState(false);
+  const [form, setForm] = useState({
+    name:'', location:'', date:'', distancia:'', desnivell:'', preu:'',
+    dificultat:'fàcil', categoria:'Trail', ubicacio:'', description:''
+  });
+  const set = (k,v) => setForm(f=>({...f,[k]:v}));
+
+  const enviar = () => {
+    if (!form.name || !form.location || !form.date || !form.distancia || !form.preu) return;
+    afegirCursa({
+      name:form.name, location:form.location, date:form.date,
+      distancia:Number(form.distancia), desnivell:Number(form.desnivell)||0,
+      preu:Number(form.preu), dificultat:form.dificultat, categoria:form.categoria,
+      ubicacio:form.ubicacio, description:form.description,
+      spots:200, emoji:'🏔️', color:'#16a34a', gradient:'#14532d,#16a34a',
+      includes:['Dorsal i xip','Medalla'], schedule:[]
+    });
+    setSent(true);
+  };
+
+  if (sent) return (
+    <div style={{minHeight:'70vh',display:'flex',alignItems:'center',justifyContent:'center',padding:'48px 24px'}}>
+      <div className="card" style={{padding:48,textAlign:'center',maxWidth:460}}>
+        <div style={{fontSize:56,marginBottom:16}}>🎉</div>
+        <h2 style={{fontSize:22,fontWeight:700,marginBottom:10,color:'#14532d'}}>Proposta enviada!</h2>
+        <p style={{color:'#6b7280',marginBottom:28,lineHeight:1.6}}>La teva cursa s'ha enviat a revisió. L'equip admin la revisarà i la publicarà en breu.</p>
+        <div style={{display:'flex',gap:12,justifyContent:'center'}}>
+          <button className="btn-green" onClick={() => { setSent(false); setForm({name:'',location:'',date:'',distancia:'',desnivell:'',preu:'',dificultat:'fàcil',categoria:'Trail',ubicacio:'',description:''}); }}>
+            Crear una altra
+          </button>
+          <button className="btn-outline" onClick={() => goView('home')}>Tornar a l'inici</button>
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div style={{minHeight:'70vh',padding:'52px 0 64px'}}>
+      <div className="section-max">
+        <div style={{marginBottom:32}}>
+          <span style={{display:'inline-block',background:ROLS.organitzador.bg,color:ROLS.organitzador.color,fontSize:11,fontWeight:700,letterSpacing:'1.5px',textTransform:'uppercase',padding:'5px 14px',borderRadius:20,marginBottom:14,border:`1px solid ${ROLS.organitzador.color}33`}}>
+            📋 Organitzador
+          </span>
+          <h1 style={{fontSize:28,fontWeight:800,marginBottom:6}}>Publicar una nova cursa</h1>
+          <p style={{color:'#6b7280'}}>Omple el formulari i l'equip de Communitrail la revisarà en menys de 48h</p>
+        </div>
+
+        <div style={{display:'grid',gridTemplateColumns:'1fr 300px',gap:28,alignItems:'start'}}>
+          <div className="card" style={{padding:32}}>
+            <h2 style={{fontSize:16,fontWeight:700,marginBottom:22}}>Informació de la cursa</h2>
+            <div className="input-group"><label>Nom de la cursa *</label><input placeholder="Ex: Ultra Trail dels Pirineus" value={form.name} onChange={e=>set('name',e.target.value)}/></div>
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16}}>
+              <div className="input-group"><label>Localització *</label><input placeholder="Poble, Província" value={form.location} onChange={e=>set('location',e.target.value)}/></div>
+              <div className="input-group"><label>Província</label><input placeholder="Catalunya" value={form.ubicacio} onChange={e=>set('ubicacio',e.target.value)}/></div>
+            </div>
+            <div className="input-group"><label>Data de celebració *</label><input type="date" value={form.date} onChange={e=>set('date',e.target.value)}/></div>
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:16}}>
+              <div className="input-group"><label>Distància (km) *</label><input type="number" placeholder="42" value={form.distancia} onChange={e=>set('distancia',e.target.value)}/></div>
+              <div className="input-group"><label>Desnivell (m)</label><input type="number" placeholder="2800" value={form.desnivell} onChange={e=>set('desnivell',e.target.value)}/></div>
+              <div className="input-group"><label>Preu (€) *</label><input type="number" placeholder="75" value={form.preu} onChange={e=>set('preu',e.target.value)}/></div>
+            </div>
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16}}>
+              <div className="input-group">
+                <label>Categoria</label>
+                <select value={form.categoria} onChange={e=>set('categoria',e.target.value)}>
+                  {['Trail','Marató','Ultra'].map(c=><option key={c}>{c}</option>)}
+                </select>
+              </div>
+              <div className="input-group">
+                <label>Dificultat</label>
+                <select value={form.dificultat} onChange={e=>set('dificultat',e.target.value)}>
+                  {['fàcil','mitja','tècnica'].map(d=><option key={d}>{d}</option>)}
+                </select>
+              </div>
+            </div>
+            <div className="input-group">
+              <label>Descripció</label>
+              <textarea placeholder="Descriu la cursa, el recorregut, l'entorn..." value={form.description} onChange={e=>set('description',e.target.value)} style={{minHeight:100,resize:'vertical',lineHeight:1.6}}/>
+            </div>
+            <button className="btn-green" style={{width:'100%',padding:'13px',fontSize:15}} onClick={enviar}>
+              Enviar proposta →
+            </button>
+          </div>
+
+          {/* Info sidebar */}
+          <div style={{display:'flex',flexDirection:'column',gap:14}}>
+            <div className="card" style={{padding:22,background:'linear-gradient(135deg,#f5f3ff,#ede9fe)',border:'1px solid #c4b5fd'}}>
+              <div style={{fontWeight:700,fontSize:14,marginBottom:8,color:'#5b21b6'}}>📋 Procés de publicació</div>
+              {['Envia el formulari','Revisió per l\'equip (48h)','Aprovació i publicació','Comença a rebre inscripcions'].map((s,i) => (
+                <div key={i} style={{display:'flex',gap:10,marginBottom:8,alignItems:'flex-start'}}>
+                  <div style={{width:20,height:20,borderRadius:'50%',background:'#7c3aed',color:'#fff',fontSize:11,fontWeight:800,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,marginTop:1}}>{i+1}</div>
+                  <span style={{fontSize:13,color:'#4c1d95',lineHeight:1.4}}>{s}</span>
+                </div>
+              ))}
+            </div>
+            <div className="card" style={{padding:22}}>
+              <div style={{fontWeight:700,fontSize:14,marginBottom:8}}>💡 Consells</div>
+              <ul style={{fontSize:13,color:'#6b7280',paddingLeft:16,lineHeight:1.8}}>
+                <li>Inclou una descripció detallada del recorregut</li>
+                <li>Especifica els requisits mínims dels participants</li>
+                <li>Adjunta informació sobre la seguretat</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* ── VISTA ORGANITZADOR: Les meves curses ── */
+const CursesOrganitzador = ({races, user, goView}) => {
+  const rol = ROLS.organitzador;
+  // En un sistema real filtraríem per organitzador_id. Aquí mostrem totes per simular.
+  const publicades = races.filter(r => r.estat === 'publicada');
+  const pendents   = races.filter(r => r.estat === 'pendent');
+
+  const StatCard = ({n, l, color, bg}) => (
+    <div className="card" style={{padding:20,textAlign:'center'}}>
+      <div style={{fontSize:26,fontWeight:800,color}}>{n}</div>
+      <div style={{fontSize:13,color:'#6b7280',marginTop:4}}>{l}</div>
+    </div>
+  );
+
+  const RaceRow = ({r}) => (
+    <div className="card" style={{padding:'16px 20px',display:'flex',gap:16,alignItems:'center'}}>
+      <img src={r.img} alt={r.name} style={{width:64,height:64,objectFit:'cover',borderRadius:8,flexShrink:0}}/>
+      <div style={{flex:1}}>
+        <div style={{fontSize:14,fontWeight:700,marginBottom:3}}>{r.name}</div>
+        <div style={{fontSize:12,color:'#6b7280'}}>{r.location} · {r.date}</div>
+        <div style={{fontSize:12,color:'#6b7280'}}>{r.distancia} km · +{r.desnivell?.toLocaleString()}m · {r.preu}€</div>
+      </div>
+      <div style={{textAlign:'right',flexShrink:0}}>
+        {r.estat === 'publicada' ? (
+          <>
+            <div style={{fontSize:12,color:'#6b7280',marginBottom:6}}>{r.taken}/{r.spots} inscrits</div>
+            <span style={{background:'#dcfce7',color:'#166534',fontSize:11,fontWeight:700,padding:'3px 10px',borderRadius:20}}>✓ Publicada</span>
+          </>
+        ) : (
+          <span style={{background:'#fef3c7',color:'#92400e',fontSize:11,fontWeight:700,padding:'3px 10px',borderRadius:20}}>⏳ Pendent</span>
+        )}
+      </div>
+    </div>
+  );
+
+  return (
+    <div style={{minHeight:'70vh',padding:'52px 0 64px'}}>
+      <div className="section-max">
+        {/* Capçalera */}
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',flexWrap:'wrap',gap:16,marginBottom:36}}>
+          <div>
+            <span style={{display:'inline-block',background:rol.bg,color:rol.color,fontSize:11,fontWeight:700,letterSpacing:'1.5px',textTransform:'uppercase',padding:'5px 14px',borderRadius:20,marginBottom:14,border:`1px solid ${rol.color}33`}}>
+              📋 Organitzador
+            </span>
+            <h1 style={{fontSize:28,fontWeight:800,marginBottom:6}}>Les meves curses</h1>
+            <p style={{color:'#6b7280'}}>Gestiona les curses que has creat i el seu estat de publicació</p>
+          </div>
+          <button className="btn-green" style={{padding:'11px 22px',fontSize:14,display:'flex',alignItems:'center',gap:8}} onClick={() => goView('formulari-proposta')}>
+            ➕ Crear nova cursa
+          </button>
+        </div>
+
+        {/* Stats */}
+        <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(160px,1fr))',gap:16,marginBottom:40}}>
+          <StatCard n={races.length}     l="Total creades"    color="#7c3aed" bg="#f5f3ff"/>
+          <StatCard n={publicades.length} l="Publicades"      color="#16a34a" bg="#dcfce7"/>
+          <StatCard n={pendents.length}   l="Pendents"        color="#d97706" bg="#fef3c7"/>
+          <StatCard n={publicades.reduce((acc,r)=>acc+(r.taken||0),0)} l="Total inscrits" color="#1d4ed8" bg="#eff6ff"/>
+        </div>
+
+        {/* Curses pendents */}
+        {pendents.length > 0 && (
+          <>
+            <h2 style={{fontSize:17,fontWeight:700,marginBottom:14,display:'flex',alignItems:'center',gap:10}}>
+              Pendents d'aprovació
+              <span style={{background:'#fef3c7',color:'#92400e',fontSize:12,fontWeight:700,padding:'2px 9px',borderRadius:20}}>{pendents.length}</span>
+            </h2>
+            <p style={{fontSize:13,color:'#6b7280',marginBottom:16}}>Aquestes curses estan en revisió per l'equip de Communitrail. En breu seran publicades.</p>
+            <div style={{display:'flex',flexDirection:'column',gap:12,marginBottom:36}}>
+              {pendents.map(r => <RaceRow key={r.id} r={r}/>)}
+            </div>
+          </>
+        )}
+
+        {/* Curses publicades */}
+        <h2 style={{fontSize:17,fontWeight:700,marginBottom:14}}>Curses publicades ({publicades.length})</h2>
+        {publicades.length === 0 ? (
+          <div style={{textAlign:'center',padding:'48px 24px',background:'#fff',borderRadius:16,border:'1.5px dashed #d1d5db'}}>
+            <div style={{fontSize:48,marginBottom:14}}>📋</div>
+            <h3 style={{fontSize:16,fontWeight:700,marginBottom:8,color:'#374151'}}>Encara no tens cap cursa publicada</h3>
+            <p style={{color:'#6b7280',marginBottom:20,fontSize:14}}>Crea la teva primera cursa i arriba a milers de corredors.</p>
+            <button className="btn-green" onClick={() => goView('formulari-proposta')}>Crear la meva primera cursa</button>
+          </div>
+        ) : (
+          <div style={{display:'flex',flexDirection:'column',gap:12}}>
+            {publicades.map(r => <RaceRow key={r.id} r={r}/>)}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+/* ── PÀGINA ARXIU CURSES (20 curses, sense link) ── */
+const ArxiuPage = ({setPage}) => {
+  const [cerca, setCerca] = useState('');
+  const [categoria, setCategoria] = useState('Totes');
+  const difMap = {tècnica:'badge-extreme', mitja:'badge-difficult', fàcil:'badge-moderate'};
+
+  const filtered = ARXIU_RACES.filter(r => {
+    const matchNom = r.name.toLowerCase().includes(cerca.toLowerCase()) || r.location.toLowerCase().includes(cerca.toLowerCase());
+    const matchCat = categoria === 'Totes' || r.categoria === categoria;
+    return matchNom && matchCat;
+  });
+
+  return (
+    <div style={{minHeight:'80vh',display:'flex',flexDirection:'column'}}>
+      <div style={{flex:1,padding:'52px 0 64px'}}>
+        <div className="section-max">
+          {/* Capçalera */}
+          <div style={{marginBottom:36}}>
+            <span style={{display:'inline-block',background:'#f0fdf4',color:'#16a34a',fontSize:11,fontWeight:700,letterSpacing:'1.5px',textTransform:'uppercase',padding:'5px 14px',borderRadius:20,marginBottom:16,border:'1px solid #bbf7d0'}}>
+              Calendari 2026
+            </span>
+            <h1 style={{fontSize:34,fontWeight:800,marginBottom:8}}>Totes les curses</h1>
+            <p style={{color:'#6b7280',fontSize:15}}>Descobreix el calendari complet de curses de muntanya per a la temporada 2026</p>
+          </div>
+
+          {/* Filtres ràpids */}
+          <div style={{display:'flex',gap:12,marginBottom:32,flexWrap:'wrap',alignItems:'center'}}>
+            <div style={{position:'relative',flex:'1',minWidth:220}}>
+              <span style={{position:'absolute',left:12,top:'50%',transform:'translateY(-50%)',color:'#9ca3af'}}>🔎</span>
+              <input placeholder="Cerca per nom o lloc..." value={cerca} onChange={e=>setCerca(e.target.value)} style={{paddingLeft:36,fontSize:14}}/>
+            </div>
+            <div style={{display:'flex',gap:8}}>
+              {['Totes','Trail','Marató','Ultra'].map(cat => (
+                <button key={cat} onClick={() => setCategoria(cat)} style={{
+                  padding:'9px 16px',borderRadius:8,border:'1.5px solid',fontSize:13,fontWeight:600,cursor:'pointer',
+                  borderColor: categoria===cat ? '#16a34a' : '#e5e7eb',
+                  background: categoria===cat ? '#f0fdf4' : '#fff',
+                  color: categoria===cat ? '#15803d' : '#374151',
+                }}>
+                  {cat}
+                </button>
+              ))}
+            </div>
+            <span style={{fontSize:13,color:'#9ca3af',fontWeight:500}}>{filtered.length} curses</span>
+          </div>
+
+          {/* Grid curses */}
+          <div className="races-grid">
+            {filtered.map(r => {
+              const pct = Math.round((r.taken/r.spots)*100);
+              return (
+                <div key={r.id} className="card" style={{cursor:'default',transition:'transform 0.18s,box-shadow 0.18s'}}
+                  onMouseOver={e=>e.currentTarget.style.transform='translateY(-2px)'}
+                  onMouseOut={e=>e.currentTarget.style.transform='none'}>
+                  <div style={{height:180,position:'relative',overflow:'hidden'}}>
+                    <img src={r.img} alt={r.name} style={{width:'100%',height:'100%',objectFit:'cover',display:'block'}}/>
+                    <div style={{position:'absolute',inset:0,background:'linear-gradient(to top,rgba(0,0,0,0.45),transparent 60%)'}}/>
+                    <span className={`badge ${difMap[r.dificultat]||'badge-moderate'}`} style={{position:'absolute',top:12,right:12,backdropFilter:'blur(4px)'}}>
+                      {r.dificultat}
+                    </span>
+                    <span style={{position:'absolute',top:12,left:12,background:'rgba(0,0,0,0.55)',color:'#fff',fontSize:10,fontWeight:700,padding:'3px 9px',borderRadius:20,backdropFilter:'blur(4px)'}}>
+                      {r.categoria}
+                    </span>
+                  </div>
+                  <div style={{padding:'18px'}}>
+                    <h3 style={{fontSize:15,fontWeight:700,marginBottom:8,lineHeight:1.3}}>{r.name}</h3>
+                    <div style={{fontSize:12,color:'#6b7280',marginBottom:3}}>📍 {r.location}</div>
+                    <div style={{fontSize:12,color:'#6b7280',marginBottom:3}}>📅 {r.date}</div>
+                    <div style={{fontSize:12,color:'#6b7280',marginBottom:14}}>📈 {r.distancia} km · +{r.desnivell.toLocaleString()}m</div>
+                    <div className="progress-bar" style={{marginBottom:10}}>
+                      <div className="progress-fill" style={{width:`${pct}%`}}/>
+                    </div>
+                    <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+                      <span style={{fontSize:20,fontWeight:800}}>{r.preu}€</span>
+                      <span style={{fontSize:12,color:'#6b7280'}}>👤 {r.taken}/{r.spots}</span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          {filtered.length === 0 && (
+            <div style={{textAlign:'center',padding:'64px 24px',color:'#6b7280'}}>
+              <div style={{fontSize:48,marginBottom:16}}>🏔️</div>
+              <p style={{fontSize:16,fontWeight:500}}>No s'han trobat curses amb aquests criteris.</p>
+            </div>
+          )}
+        </div>
+      </div>
+      <Footer setPage={setPage}/>
+    </div>
+  );
+};
+
+/* ── PÀGINA NOTÍCIES ── */
+const NoticiesPage = ({setPage}) => {
+  const [selected, setSelected] = useState(null);
+
+  if (selected) return (
+    <div style={{minHeight:'80vh',display:'flex',flexDirection:'column'}}>
+      <div style={{flex:1,padding:'32px 0 64px'}}>
+        <div className="section-max" style={{maxWidth:780}}>
+          <button className="btn-ghost" style={{color:'#6b7280',display:'flex',alignItems:'center',gap:6,marginBottom:28}} onClick={() => { setSelected(null); scrollTop(); }}>
+            ← Tornar a notícies
+          </button>
+          <span style={{display:'inline-block',background:'#f0fdf4',color:'#16a34a',fontSize:11,fontWeight:700,letterSpacing:'1.5px',textTransform:'uppercase',padding:'5px 14px',borderRadius:20,marginBottom:16,border:'1px solid #bbf7d0'}}>
+            {selected.categoria}
+          </span>
+          <h1 style={{fontSize:28,fontWeight:800,marginBottom:12,lineHeight:1.3}}>{selected.titol}</h1>
+          <div style={{fontSize:13,color:'#9ca3af',marginBottom:28}}>📅 {selected.data} · Font: {selected.font}</div>
+          <div style={{height:380,borderRadius:16,overflow:'hidden',marginBottom:32}}>
+            <img src={selected.img} alt={selected.titol} style={{width:'100%',height:'100%',objectFit:'cover'}}/>
+          </div>
+          <div style={{fontSize:16,color:'#374151',lineHeight:1.85,whiteSpace:'pre-line'}}>{selected.text}</div>
+        </div>
+      </div>
+      <Footer setPage={setPage}/>
+    </div>
+  );
+
+  return (
+    <div style={{minHeight:'80vh',display:'flex',flexDirection:'column'}}>
+      <div style={{flex:1,padding:'52px 0 64px'}}>
+        <div className="section-max">
+          <div style={{marginBottom:40}}>
+            <span style={{display:'inline-block',background:'#f0fdf4',color:'#16a34a',fontSize:11,fontWeight:700,letterSpacing:'1.5px',textTransform:'uppercase',padding:'5px 14px',borderRadius:20,marginBottom:16,border:'1px solid #bbf7d0'}}>
+              Notícies
+            </span>
+            <h1 style={{fontSize:34,fontWeight:800,marginBottom:8}}>Actualitat del trail running</h1>
+            <p style={{color:'#6b7280',fontSize:15}}>Les últimes notícies, resultats i reportatges del món de les curses de muntanya</p>
+          </div>
+
+          {/* Notícia destacada */}
+          <div className="card" style={{marginBottom:32,cursor:'pointer',overflow:'hidden',display:'grid',gridTemplateColumns:'1fr 1fr'}}
+            onClick={() => { setSelected(NOTICIES[0]); scrollTop(); }}>
+            <div style={{height:320,overflow:'hidden'}}>
+              <img src={NOTICIES[0].img} alt={NOTICIES[0].titol} style={{width:'100%',height:'100%',objectFit:'cover',transition:'transform 0.4s'}}
+                onMouseOver={e=>e.style.transform='scale(1.04)'}
+                onMouseOut={e=>e.style.transform='scale(1)'}/>
+            </div>
+            <div style={{padding:32,display:'flex',flexDirection:'column',justifyContent:'center'}}>
+              <span style={{display:'inline-block',background:'#16a34a',color:'#fff',fontSize:10,fontWeight:700,padding:'3px 10px',borderRadius:20,marginBottom:14,textTransform:'uppercase'}}>{NOTICIES[0].categoria} · Destacat</span>
+              <h2 style={{fontSize:20,fontWeight:800,marginBottom:12,lineHeight:1.3}}>{NOTICIES[0].titol}</h2>
+              <p style={{fontSize:14,color:'#6b7280',lineHeight:1.7,marginBottom:16}}>{NOTICIES[0].resum}</p>
+              <div style={{fontSize:12,color:'#9ca3af'}}>{NOTICIES[0].data}</div>
+            </div>
+          </div>
+
+          {/* Resta de notícies */}
+          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(280px,1fr))',gap:22}}>
+            {NOTICIES.slice(1).map(n => (
+              <div key={n.id} className="card" style={{cursor:'pointer',transition:'transform 0.18s,box-shadow 0.18s'}}
+                onMouseOver={e=>e.currentTarget.style.transform='translateY(-3px)'}
+                onMouseOut={e=>e.currentTarget.style.transform='none'}
+                onClick={() => { setSelected(n); scrollTop(); }}>
+                <div style={{height:200,overflow:'hidden',position:'relative'}}>
+                  <img src={n.img} alt={n.titol} style={{width:'100%',height:'100%',objectFit:'cover',transition:'transform 0.4s'}}
+                    onMouseOver={e=>e.style.transform='scale(1.06)'}
+                    onMouseOut={e=>e.style.transform='scale(1)'}/>
+                  <div style={{position:'absolute',inset:0,background:'linear-gradient(to top,rgba(0,0,0,0.35),transparent 60%)'}}/>
+                  <span style={{position:'absolute',top:12,left:12,background:'#16a34a',color:'#fff',fontSize:10,fontWeight:700,padding:'3px 10px',borderRadius:20,textTransform:'uppercase'}}>{n.categoria}</span>
+                </div>
+                <div style={{padding:'18px'}}>
+                  <h3 style={{fontSize:14,fontWeight:700,marginBottom:8,lineHeight:1.4}}>{n.titol}</h3>
+                  <p style={{fontSize:12,color:'#6b7280',lineHeight:1.6,marginBottom:10,display:'-webkit-box',WebkitLineClamp:2,WebkitBoxOrient:'vertical',overflow:'hidden'}}>{n.resum}</p>
+                  <div style={{fontSize:11,color:'#9ca3af'}}>{n.data} · {n.font}</div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
       <Footer setPage={setPage}/>
@@ -1039,31 +2261,110 @@ const ConfirmationPage = ({race, user, setPage}) => {
 /* ── APP PRINCIPAL ── */
 const App = () => {
   const [page, setPage] = useState('home');
+  const [view, setView] = useState('home'); // vista dins la SPA (home/inscripcions/admin-panel/formulari-proposta/contacte)
   const [user, setUser] = useState(() => {
-    try { const s = localStorage.getItem('ct_user'); return s ? JSON.parse(s) : null; } catch { return null; }
+    try {
+      const s = localStorage.getItem('ct_user');
+      if (!s) return null;
+      const u = JSON.parse(s);
+      // Si l'usuari no té rol vàlid (sessió antiga), el descartem
+      if (!u.rol || !ROLS[u.rol]) { localStorage.removeItem('ct_user'); return null; }
+      return u;
+    } catch { return null; }
   });
   const [selectedRace, setSelectedRace] = useState(null);
   const [currentRegistration, setCurrentRegistration] = useState(null);
+  // Curses amb estat (publicada / pendent)
+  const [races, setRaces] = useState(() =>
+    RACES.map(r => ({...r, estat: 'publicada'}))
+  );
 
   const syncUser = u => {
     setUser(u);
     if (u) localStorage.setItem('ct_user', JSON.stringify(u));
   };
 
-  const pages = {
-    home: <HomePage setPage={setPage} setSelectedRace={setSelectedRace}/>,
-    race: <RacePage race={selectedRace} setPage={setPage} user={user} setCurrentRegistration={setCurrentRegistration}/>,
-    signin: <SignIn setPage={setPage} setUser={syncUser}/>,
-    signup: <SignUp setPage={setPage} setUser={syncUser}/>,
-    profile: <ProfilePage user={user} setUser={syncUser} setPage={setPage} setSelectedRace={setSelectedRace}/>,
-    payment: <PaymentPage race={currentRegistration || selectedRace} user={user} setPage={setPage} setUser={syncUser} setCurrentRegistration={setCurrentRegistration}/>,
-    confirmation: <ConfirmationPage race={currentRegistration || selectedRace} user={user} setPage={setPage}/>,
+  const loginCom = (rol) => {
+    const u = {...USERS_SIMULATS[rol]};
+    syncUser(u);
+    setView('home');
+    setPage('home');
   };
+
+  const logout = () => {
+    localStorage.removeItem('ct_user');
+    setUser(null);
+    setView('home');
+    setPage('home');
+  };
+
+  const aprovarCursa = (id) => {
+    setRaces(prev => prev.map(r => r.id === id ? {...r, estat:'publicada'} : r));
+  };
+
+  const afegirCursa = (nova) => {
+    setRaces(prev => [...prev, {...nova, id: Date.now(), estat:'pendent', taken:0, img:'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80'}]);
+  };
+
+  // Navega a una vista SPA i reseteja page a home
+  const goView = (v) => { setView(v); setPage('home'); scrollTop(); };
+  const navPage = (p) => { setPage(p); scrollTop(); };
+
+  // Pàgines que sobreescriuen la vista SPA (fitxa cursa, pagament, etc.)
+  const isOverlay = ['race','signin','signup','payment','confirmation','profile'].includes(page);
 
   return (
     <div>
-      <Nav page={page} setPage={setPage} user={user} setUser={syncUser}/>
-      {pages[page] || pages.home}
+      <Nav
+        page={page} setPage={setPage}
+        user={user} setUser={syncUser}
+        logout={logout} loginCom={loginCom}
+        view={view} setView={goView}
+      />
+
+      {/* ── ROLE SWITCHER (dev helper) ── */}
+      {!isOverlay && (
+        <div style={{background:'#1a1a1a',padding:'6px clamp(20px,4vw,80px)',display:'flex',alignItems:'center',gap:10,flexWrap:'wrap'}}>
+          <span style={{fontSize:11,color:'#6b7280',fontWeight:600,textTransform:'uppercase',letterSpacing:'0.8px'}}>Test ràpid:</span>
+          {Object.entries(ROLS).map(([rol,info]) => (
+            <button key={rol} onClick={() => loginCom(rol)} style={{
+              background: user?.rol===rol ? info.bg : 'transparent',
+              color: user?.rol===rol ? info.color : '#9ca3af',
+              border:`1px solid ${user?.rol===rol ? info.color : '#374151'}`,
+              borderRadius:20, padding:'3px 12px', fontSize:11, fontWeight:700,
+              cursor:'pointer', transition:'all 0.2s'
+            }}>
+              {info.icon} {info.label}
+            </button>
+          ))}
+          {user && (
+            <button onClick={logout} style={{background:'transparent',color:'#6b7280',border:'1px solid #374151',borderRadius:20,padding:'3px 12px',fontSize:11,fontWeight:600,cursor:'pointer',marginLeft:'auto'}}>
+              ✕ Tancar sessió
+            </button>
+          )}
+        </div>
+      )}
+
+      {/* ── OVERLAYS (pàgines que cobreixen la SPA) ── */}
+      {page === 'race'         && <RacePage race={selectedRace} setPage={navPage} user={user} setCurrentRegistration={setCurrentRegistration}/>}
+      {page === 'signin'       && <SignIn setPage={navPage} setUser={syncUser} loginCom={loginCom}/>}
+      {page === 'signup'       && <SignUp setPage={navPage} setUser={syncUser}/>}
+      {page === 'profile'      && <ProfilePage user={user} setUser={syncUser} setPage={navPage} setSelectedRace={setSelectedRace}/>}
+      {page === 'payment'      && <PaymentPage race={currentRegistration||selectedRace} user={user} setPage={navPage} setUser={syncUser} setCurrentRegistration={setCurrentRegistration}/>}
+
+      {/* ── VISTES SPA (només si no hi ha overlay) ── */}
+      {!isOverlay && (
+        <>
+          {view === 'home'               && <HomePage setPage={navPage} setSelectedRace={setSelectedRace} races={races} goView={goView}/>}
+          {view === 'contacte'           && <ContactePage setPage={navPage}/>}
+          {view === 'noticies'           && <NoticiesPage setPage={navPage}/>}
+          {view === 'arxiu'              && <ArxiuPage setPage={navPage}/>}
+          {view === 'inscripcions'       && <InscripcionsView user={user} setPage={navPage} setSelectedRace={setSelectedRace}/>}
+          {view === 'admin-panel'        && <AdminView races={races} aprovarCursa={aprovarCursa}/>}
+          {view === 'formulari-proposta' && <FormulariProposta afegirCursa={afegirCursa} goView={goView}/>}
+          {view === 'curses-organitzador' && <CursesOrganitzador races={races} user={user} goView={goView}/>}
+        </>
+      )}
     </div>
   );
 };
